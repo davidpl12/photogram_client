@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
 import { Publicacion } from '../models/Publicacion';
 
 @Injectable({
@@ -12,8 +12,18 @@ export class PublicacionesService {
   constructor(private http: HttpClient) {}
 
   // Obtener todas las publicaciones
-  getPublicaciones(): Observable<Publicacion[]> {
-    return this.http.get<Publicacion[]>(`${this.apiUrl}/publicaciones`);
+  getPublicaciones(token: string ): Observable<Publicacion[]> {
+    if (token !== null) {
+      const headers = new HttpHeaders({
+        'Authorization': `Bearer ${token}`
+      });
+
+      return this.http.get<any[]>(`${this.apiUrl}/publicaciones`, { headers });
+    } else {
+      // Manejar el caso cuando el token es null
+      // Por ejemplo, puedes devolver un Observable vacío o lanzar un error
+      return throwError('Token de autenticación nulo');
+    }
   }
 
   // Obtener una publicación por ID
@@ -22,9 +32,20 @@ export class PublicacionesService {
   }
 
   // Crear una nueva publicación
-  crearPublicacion(publicacion: Publicacion): Observable<Publicacion> {
-    return this.http.post<Publicacion>(`${this.apiUrl}/publicaciones`, publicacion);
-  }
+  crearPublicacion(formData: FormData, token: string): Observable<Publicacion> {
+    if (token !== null) {
+      const headers = new HttpHeaders({
+        'Authorization': `Bearer ${token}`
+      });
+
+  return this.http.post<Publicacion>(`${this.apiUrl}/publicaciones`, formData, { headers });
+} else {
+  // Manejar el caso cuando el token es null
+  // Por ejemplo, puedes devolver un Observable vacío o lanzar un error
+  return throwError('Token de autenticación nulo');
+}
+
+}
 
   // Actualizar una publicación existente
   actualizarPublicacion(publicacion: Publicacion): Observable<Publicacion> {
