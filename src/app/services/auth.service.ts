@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, catchError, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -23,4 +23,22 @@ export class AuthService {
   register(formData: FormData) {
     return this.http.post<any>(`${this.apiUrl}/register`, formData);
   }
+
+  getUserData(token: string): Observable<any> {
+    if (token !== null) {
+      const headers = new HttpHeaders({
+        Authorization: `Bearer ${token}`
+      });
+
+      return this.http.get<any>(`${this.apiUrl}/user-data`, { headers }).pipe(
+        catchError((error: any) => {
+          console.error('Error al obtener los datos del usuario', error);
+          return throwError('Error al obtener los datos del usuario');
+        })
+      );
+    } else {
+      return throwError('Token de autenticación nulo');
+    }
+  }
+
 }
