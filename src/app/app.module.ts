@@ -14,6 +14,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { RegisterComponent } from './component/register/register.component';
 import { PublicacionComponent } from './component/publicacion/publicacion.component';
 import { PerfilComponent } from './component/perfil/perfil.component';
+import { NavegacionComponent } from './component/navegacion/navegacion.component';
 
 
 const appRoutes: Routes = [
@@ -32,7 +33,8 @@ const appRoutes: Routes = [
     LoginComponent,
     RegisterComponent,
     PublicacionComponent,
-    PerfilComponent
+    PerfilComponent,
+    NavegacionComponent
   ],
   imports: [
     BrowserModule,

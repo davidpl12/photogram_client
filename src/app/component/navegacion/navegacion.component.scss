@@ -1,0 +1,87 @@
+$navbar-width: 200px;
+$navbar-bg-color: #E5F2F3;
+$color-blue: #004AAD;
+$menu-item-height: 50px;
+$profile-image-size: 40px;
+$profile-image-border-radius: 50%;
+
+// Estilos generales
+body {
+  margin: 0;
+}
+
+.navbar {
+  width: $navbar-width;
+  height: 100vh;
+  background-color: $navbar-bg-color;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  color: $color-blue;
+  .logo {
+    width: 100%;
+    text-align: center;
+    img{
+      width: 150px;
+    }
+  }
+
+  .menu {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .menu-item {
+      display: flex;
+      align-items: center;
+      height: $menu-item-height;
+      width: 100%;
+      padding: 0 10px;
+      cursor: pointer;
+      &:hover {
+        background-color: rgba(7, 4, 84, 0.1);
+      }
+      a {
+        text-decoration: none;
+
+        &:hover {
+          color: $color-blue; // Color al pasar el cursor sobre el enlace
+        }
+
+        &:visited {
+          color: $color-blue; // Color para los enlaces visitados
+        }
+      }
+      .size-icon {
+        width: 30px;
+        height: 30px;
+        margin-right: 15px ;
+        fill: currentColor;
+      }
+    }
+  }
+
+
+
+
+
+
+
+  .profile {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+  }
+
+  .profile-image {
+    width: $profile-image-size;
+    height: $profile-image-size;
+    border-radius: $profile-image-border-radius;
+    margin-right: 10px;
+  }
+}
+
+

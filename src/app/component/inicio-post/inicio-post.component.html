@@ -1,6 +1,9 @@
 <h2>Página de Inicio</h2>
 
-<div *ngFor="let publicacion of publicaciones">
+<button id="deleteUserButton" *ngIf="userRole === '1'">Eliminar usuario</button>
+
+
+<div *ngFor="let publicacion of publiFiltradas">
 
   <img src="{{url}}{{ publicacion.imagen }}" alt="">
   <p>{{ publicacion.descripcion }}</p>

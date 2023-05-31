@@ -19,9 +19,14 @@ export class LoginComponent {
       (response) => {
         // Aquí obtienes la respuesta de la API después del inicio de sesión exitoso
         const verificationToken = response.access_token;
+        const id = response.id;
+        const rol_id = response.userRole;
+
 
         // Guardar el token en el almacenamiento local
         localStorage.setItem('verificationToken', verificationToken);
+        localStorage.setItem('userRole', rol_id);
+        localStorage.setItem('id_user', id);
 
         // Resto de la lógica después del inicio de sesión exitoso
         this.router.navigate(['/inicio']);

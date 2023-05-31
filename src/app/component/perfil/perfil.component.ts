@@ -17,6 +17,8 @@ export class PerfilComponent implements OnInit {
   numSeguidores : number = 0 ;
   numSeguidos : number = 0 ;
   url: string = "http://127.0.0.1:8000/img/publicaciones/";
+  userRole = localStorage.getItem('userRole');
+
 
 
   constructor(

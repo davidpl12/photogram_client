@@ -5,6 +5,9 @@
 <p *ngIf="userData">{{userData.fecha_nac}}</p>
 <p >Seguidores: {{numSeguidores}}</p>
 <p >Seguidos: {{numSeguidos}}</p>
+
+<button id="deleteUserButton" *ngIf="userRole == '1'">Eliminar usuario</button>
+
 <div *ngFor="let publicacion of publicaciones">
 
   <img src="{{url}}{{ publicacion.imagen }}" alt="">

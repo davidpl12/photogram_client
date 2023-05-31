@@ -119,4 +119,21 @@ export class PublicacionesService {
       return throwError('Token de autenticación nulo');
     }
   }
+
+  getSeguidos(idEnvia : number,token: string): Observable<any> {
+    if (token !== null) {
+      const headers = new HttpHeaders({
+        Authorization: `Bearer ${token}`
+      });
+
+      return this.http.get<any>(`${this.apiUrl}/todosseguidos/${idEnvia}`, { headers }).pipe(
+        catchError((error: any) => {
+          console.error('Error al obtener los datos de los seguidos', error);
+          return throwError('Error al obtener los datos del usuario');
+        })
+      );
+    } else {
+      return throwError('Token de autenticación nulo');
+    }
+  }
 }
