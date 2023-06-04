@@ -1,47 +1,51 @@
-<form (ngSubmit)="crearPublicacion()" enctype="multipart/form-data">
+<button (click)="openModal()">Abrir Formulario</button>
 
-  <div>
-    <label>Descripción:</label>
-    <textarea [(ngModel)]="descripcion" name="descripcion" required></textarea>
+<div class="contenedor">
+
+
+<div class="modal-overlay" [class.active]="modalOpen">
+  <div class="modal">
+    <form (ngSubmit)="crearPublicacion()" enctype="multipart/form-data">
+      <div>
+        <label>Descripción:</label>
+        <textarea [(ngModel)]="descripcion" name="descripcion" required></textarea>
+      </div>
+      <div>
+        <label>Lugar de realización:</label>
+        <input type="text" [(ngModel)]="lugarRealizacion" name="lugarRealizacion" required>
+      </div>
+      <div>
+        <label>Licencia:</label>
+        <select [(ngModel)]="licencia" name="licencia" required>
+          <option value="Creative Commons">Creative Commons</option>
+          <option value="Public Domain">Public Domain</option>
+        </select>
+      </div>
+      <div>
+        <label>Cámara:</label>
+        <select [(ngModel)]="camara" name="camara" required>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+        </select>
+      </div>
+      <div>
+        <label>Imagen:</label>
+        <input type="file" (change)="onFileSelected($event)" name="imagen" required>
+      </div>
+      <div>
+        <label>Álbum:</label>
+        <select [(ngModel)]="album" name="album" required>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+        </select>
+      </div>
+      <div>
+        <button type="submit">Crear Publicación</button>
+        <button type="reset" (click)="closeModal()">Cancelar</button>
+      </div>
+    </form>
   </div>
-  <div>
-    <label>Lugar de realización:</label>
-    <input type="text" [(ngModel)]="lugarRealizacion" name="lugarRealizacion" required>
-  </div>
-  <div>
-    <label>Licencia:</label>
-    <select [(ngModel)]="licencia" name="licencia" required>
-      <option value="Creative Commons">Creative Commons</option>
-      <option value="Public Domain">Public Domain</option>
-    </select>
-  </div>
-  <div>
-    <label>Cámara:</label>
-    <select [(ngModel)]="camara" name="camara" required>
-      <!-- Aquí debes cargar las opciones de las cámaras desde tu API -->
-      <option value="1">1</option>
-      <option value="2">2</option>
-      <option value="3">3</option>
-    </select>
-  </div>
-  <div>
-    <label>Imagen:</label>
-    <input type="file" (change)="onFileSelected($event)" name="imagen" required>
-  </div>
-  <div>
-    <label>Número de reacciones:</label>
-    <input type="number" [(ngModel)]="numReacciones" name="numReacciones" required>
-  </div>
-  <div>
-    <label>Álbum:</label>
-    <select [(ngModel)]="album" name="album" required>
-      <!-- Aquí debes cargar las opciones de los álbumes desde tu API -->
-      <option value="1">1</option>
-      <option value="2">2</option>
-      <option value="3">3</option>
-    </select>
-  </div>
-  <div>
-    <button type="submit">Crear Publicación</button>
-  </div>
-</form>
+</div>
+</div>

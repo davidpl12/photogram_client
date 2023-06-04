@@ -9,4 +9,5 @@ export interface Usuario {
   fecha_nac: Date;
   foto_perfil: string;
   fecha_registro: Date;
+  rol_id:number;
 }

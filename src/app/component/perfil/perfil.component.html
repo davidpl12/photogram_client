@@ -1,15 +1,31 @@
-<h2>Mi perfil</h2>
-<p *ngIf="userData">{{userData.nombre}}</p>
-<p *ngIf="userData">{{userData.apellidos}}</p>
-<p *ngIf="userData">{{userData.user}}</p>
-<p *ngIf="userData">{{userData.fecha_nac}}</p>
-<p >Seguidores: {{numSeguidores}}</p>
-<p >Seguidos: {{numSeguidos}}</p>
+<div class="profile">
+  <div>
+    <div class="profile-info">
+      <img *ngIf="userData" src="{{url_perfil}}{{userData.foto_perfil}}" alt="Profile Picture">
+      <h1 class="username"*ngIf="userData">{{userData.user}}</h1>
+      <p class="full-name"*ngIf="userData">{{userData.nombre}} {{userData.apellidos}}</p>
+      <p class="birthdate"*ngIf="userData">{{userData.fecha_nac}}</p>
+    </div>
+    <div class="profile-stats">
+      <div class="followers">
+        <h2>Seguidores</h2>
+        <p>{{numSeguidores}}</p>
+      </div>
+      <div class="following">
+        <h2>Seguidos</h2>
+        <p>{{numSeguidos}}</p>
+      </div>
+    </div>
+    <div class="photos">
+      <div class="photo-column" *ngFor="let publicacion of publicaciones; let i = index;">
+        <a href="/publicacion/{{publicacion.id}}"><img src="{{url}}{{publicacion.imagen}}" alt="Photo {{i + 1}}"></a>
 
-<button id="deleteUserButton" *ngIf="userRole == '1'">Eliminar usuario</button>
+      </div>
+    </div>
+  </div>
 
-<div *ngFor="let publicacion of publicaciones">
 
-  <img src="{{url}}{{ publicacion.imagen }}" alt="">
-  <p>{{ publicacion.descripcion }}</p>
 </div>
+
+
+

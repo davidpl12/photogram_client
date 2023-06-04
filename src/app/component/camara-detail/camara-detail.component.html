@@ -1,0 +1,25 @@
+<div class="contenedor_global">
+
+  <div class="contenedor">
+
+    <div class="camera-detail">
+      <div *ngIf="camara" class="camera-info">
+        <h2  class="camera-brand">{{camara.marca}}</h2>
+        <h3 class="camera-model">{{camara.modelo}}</h3>
+        <p class="camera-description">{{camara.descripcion}}</p>
+        <p class="camera-rating">Valoración: {{camara.valoracion}}/5</p>
+      </div>
+
+    </div>
+
+    <div class="publications">
+      <h2>Fotos con esta camara:</h2>
+      <div class="publication">
+        <div class="photos ">
+          <div class="photo-column" *ngFor="let publicaciones of publicaciones; let i = index;">
+            <a href="/publicacion/{{publicaciones.id}}"><img src="{{url}}{{publicaciones.imagen}}" alt="Photo {{i + 1}}"></a>
+          </div>
+        </div>
+    </div>
+  </div>
+</div>

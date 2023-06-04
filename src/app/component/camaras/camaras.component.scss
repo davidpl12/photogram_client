@@ -1,0 +1,50 @@
+$colorFondo: #F4F9FF;
+
+.cameras-cards {
+  display: flex;
+  flex-wrap: wrap; /* Permite que las tarjetas se envuelvan en múltiples filas */
+  justify-content:center; /* Distribuye las tarjetas de manera uniforme en el contenedor */
+  align-items: center; /* Alinea las tarjetas en la parte superior del contenedor */
+  width: calc(100vw - 300px); /* Ajusta el ancho máximo del contenedor */
+  min-height: calc(100vh - 80px);
+  margin: 0 auto; /* Centra el contenedor horizontalmente */
+margin: 40px;
+padding: 10px;
+  background-color: $colorFondo;
+}
+
+.camera-card {
+  width: 300px;
+  min-height: 300px;
+  padding: 40px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 10px;
+  text-align: center;
+}
+
+.camera-brand {
+  font-size: 24px;
+  color: #333;
+  margin-top: 0;
+}
+
+.camera-model {
+  font-size: 18px;
+  color: #666;
+}
+
+.camera-description {
+  font-size: 14px;
+  color: #999;
+  margin-top: 10px;
+}
+
+.camera-rating {
+  font-size: 16px;
+  color: #ff9933;
+  margin-top: 10px;
+}
+
+

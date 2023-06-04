@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Location } from '@angular/common';
+
 import { PublicacionesService } from 'src/app/services/publicaciones.service';
 
 @Component({
@@ -8,6 +10,8 @@ import { PublicacionesService } from 'src/app/services/publicaciones.service';
 })
 
 export class PublicacionComponent {
+  modalOpen: boolean = true;
+
   autor: string = '';
   descripcion: string = '';
   lugarRealizacion: string = '';
@@ -17,7 +21,17 @@ export class PublicacionComponent {
   numReacciones: number = 0;
   album: string = '';
 
-  constructor(private publicacionService: PublicacionesService) {}
+  constructor(private publicacionService: PublicacionesService, private location: Location) {}
+
+  openModal() {
+    this.modalOpen = true;
+  }
+
+  closeModal() {
+    this.modalOpen = false;
+    // Regresar a la página anterior
+  this.location.back();
+  }
 
   crearPublicacion(): void {
     const verificationToken = localStorage.getItem('verificationToken');
@@ -40,6 +54,8 @@ export class PublicacionComponent {
       (response) => {
         // Manejar la respuesta del servidor
         console.log('Publicación creada');
+        this.closeModal();
+
       },
       (error) => {
         // Manejar el error

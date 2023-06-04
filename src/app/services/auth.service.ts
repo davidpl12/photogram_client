@@ -24,6 +24,8 @@ export class AuthService {
     return this.http.post<any>(`${this.apiUrl}/register`, formData);
   }
 
+
+
   getUserData(token: string): Observable<any> {
     if (token !== null) {
       const headers = new HttpHeaders({

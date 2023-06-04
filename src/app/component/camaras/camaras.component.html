@@ -1,0 +1,11 @@
+<div class="cameras-cards">
+    <div *ngFor="let camara of camara" class="camera-card">
+      <div class="camera-info" (click)="verdetalles(camara.id)">
+        <h2 class="camera-brand">{{camara.marca}}</h2>
+        <h3 class="camera-model">{{camara.modelo}}</h3>
+        <p class="camera-description">{{camara.descripcion}}</p>
+        <p class="camera-rating">Valoración: {{camara.valoracion}}/5</p>
+      </div>
+    </div>
+  </div>
+

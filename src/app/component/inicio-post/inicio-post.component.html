@@ -1,10 +1,72 @@
-<h2>Página de Inicio</h2>
+<div class="overlay" *ngIf="isLoading">
 
-<button id="deleteUserButton" *ngIf="userRole === '1'">Eliminar usuario</button>
+  <div class="spinner ">
+    <img src="https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif" />
+  </div>
+
+</div>
 
 
-<div *ngFor="let publicacion of publiFiltradas">
+<div>
 
-  <img src="{{url}}{{ publicacion.imagen }}" alt="">
-  <p>{{ publicacion.descripcion }}</p>
+
+<div *ngIf="!isLoading" >
+
+
+  <div class="contenedor">
+    <div class="column">
+      <div class="boton">
+        <a href="/publicacion"><button>Añadir nuevo</button></a>
+      </div>
+
+      <div *ngFor="let publicacion of publicacionesConUsuarios" class="card">
+        <div class="card-header">
+          <div class="datos">
+            <img *ngIf="publicacion.foto_perfil; else defaultProfilePic" [src]="url_perfil + publicacion.foto_perfil"
+              alt="Imagen de la publicación">
+            <ng-template #defaultProfilePic>
+              <img [src]="url_perfil + 'user.png'" alt="Foto de perfil por defecto">
+            </ng-template>
+            <div class="profile-info">
+              <a href="">
+                <h3 *ngIf="publicacion.autor">{{ publicacion.user }}</h3>
+              </a>
+
+              <span>Hace 1 hora</span>
+            </div>
+
+
+          </div>
+          <div>
+            <span *ngIf="userData" (click)="agregarReaccion(userData.id, publicacion.id)">
+              {{ meGusta ? 'No me gusta' : 'Me gusta' }}
+            </span>
+                      </div>
+
+        </div>
+        <div class="card-content">
+          <a href="/publicacion/{{publicacion.id}}"><img [src]="url + publicacion.imagen" alt=""></a>
+        </div>
+        <div class="card-footer">
+
+          <p>{{ publicacion.descripcion }}</p>
+          <div>
+            <a href="/camara/{{publicacion.camara}}">
+              <p>Camara: {{ publicacion.camara_marca}} - {{ publicacion.camara_modelo}}</p>
+            </a>
+            <a href="/album/{{publicacion.album}}">
+              <p>Album: {{ publicacion.album_nombre }}</p>
+            </a>
+          </div>
+
+          <p>A {{numReacciones}} le ha gustado esta foto</p>
+
+
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div>

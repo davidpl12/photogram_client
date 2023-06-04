@@ -56,11 +56,15 @@ a {
 
 .contenedor {
   display: flex;
-  flex-wrap: wrap;
-  justify-content:center;
-  align-items: flex-start;
-  width: calc(100vw - 220px);
-  margin: 0 auto;
+  flex-wrap: wrap; /* Permite que las tarjetas se envuelvan en múltiples filas */
+  justify-content:center; /* Distribuye las tarjetas de manera uniforme en el contenedor */
+  align-items: center; /* Alinea las tarjetas en la parte superior del contenedor */
+  width: calc(100vw - 300px); /* Ajusta el ancho máximo del contenedor */
+  min-height: calc(100vh - 80px);
+  margin: 0 auto; /* Centra el contenedor horizontalmente */
+margin: 40px;
+padding: 10px;
+  background-color: $colorFondo;
 }
 
 .card {

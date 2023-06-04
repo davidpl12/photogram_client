@@ -1,0 +1,110 @@
+$colorFondo: #F4F9FF;
+
+
+
+.contenedor_global{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content:center;
+  align-items: center;
+  width: calc(100vw - 220px);
+  margin: 0 auto;
+}
+
+.camera-detail {
+  max-width: 800px;
+  margin: 50px auto;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+.camera-info {
+  text-align: center;
+}
+
+.camera-brand {
+  font-size: 24px;
+  color: #333;
+  margin-top: 0;
+}
+
+.camera-model {
+  font-size: 18px;
+  color: #666;
+}
+
+.camera-description {
+  font-size: 14px;
+  color: #999;
+  margin-top: 10px;
+}
+
+.camera-rating {
+  font-size: 16px;
+  color: #ff9933;
+  margin-top: 10px;
+}
+
+.camera-images img {
+  max-width: 100%;
+  height: auto;
+  margin: 0 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.publications {
+  max-width: 800px;
+  margin: 50px auto;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+.publications h2 {
+  font-size: 24px;
+  color: #333;
+  margin-top: 0;
+}
+
+.publication {
+  margin-top: 20px;
+}
+
+.publication h3 {
+  font-size: 18px;
+  color: #666;
+  margin-top: 0;
+}
+
+.publication p {
+  font-size: 14px;
+  color: #999;
+}
+
+
+.photos {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  width: 640px;
+  background-color: $colorFondo;
+
+  .photo-column {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+
+    img {
+      width: 300px;
+      height: 300px;
+      margin: 10px;
+    }
+  }
+}
+

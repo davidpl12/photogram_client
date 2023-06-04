@@ -15,9 +15,19 @@ import { RegisterComponent } from './component/register/register.component';
 import { PublicacionComponent } from './component/publicacion/publicacion.component';
 import { PerfilComponent } from './component/perfil/perfil.component';
 import { NavegacionComponent } from './component/navegacion/navegacion.component';
+import { CamarasComponent } from './component/camaras/camaras.component';
+import { CamaraDetailComponent } from './component/camara-detail/camara-detail.component';
+import { AlbumDetailComponent } from './component/album-detail/album-detail.component';
+import { PublicacionDetailComponent } from './component/publicacion-detail/publicacion-detail.component';
 
 
 const appRoutes: Routes = [
+  //{ path: 'perfil', component: PerfilComponent },
+ // { path: 'perfil', component: PerfilComponent },
+  { path: 'publicacion/:id', component: PublicacionDetailComponent },
+  { path: 'album/:id', component: AlbumDetailComponent },
+  { path: 'camara/:id', component: CamaraDetailComponent },
+  { path: 'camara', component: CamarasComponent },
   { path: 'perfil', component: PerfilComponent },
   { path: 'publicacion', component: PublicacionComponent },
   { path: 'register', component: RegisterComponent },
@@ -34,7 +44,11 @@ const appRoutes: Routes = [
     RegisterComponent,
     PublicacionComponent,
     PerfilComponent,
-    NavegacionComponent
+    NavegacionComponent,
+    CamarasComponent,
+    CamaraDetailComponent,
+    AlbumDetailComponent,
+    PublicacionDetailComponent
   ],
   imports: [
     BrowserModule,

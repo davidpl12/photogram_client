@@ -1,0 +1,51 @@
+<div class="contenedor">
+  <div class="column">
+
+
+    <div *ngIf="publicaciones" class="card">
+      <div *ngIf="usuario" class="card-header">
+        <div class="datos">
+          <img *ngIf="usuario.foto_perfil; else defaultProfilePic" [src]="url_perfil + usuario.foto_perfil"
+            alt="Imagen de la publicación">
+          <ng-template #defaultProfilePic>
+            <img [src]="url_perfil + 'user.png'" alt="Foto de perfil por defecto">
+          </ng-template>
+          <div class="profile-info">
+            <a href="">
+              <h3 >{{ usuario.user }}</h3>
+            </a>
+
+            <span>Hace 1 hora</span>
+          </div>
+
+
+        </div>
+
+
+      </div>
+      <div class="card-content">
+        <img [src]="url + publicaciones.imagen" alt="">
+      </div>
+      <div class="card-footer">
+
+        <p>{{ publicaciones.descripcion }}</p>
+        <p>Foto realizada en: {{ publicaciones.lugar_realizacion }}</p>
+        <p>Bajo la licencia: {{ publicaciones.licencia }}</p>
+        <div *ngIf="camara album">
+          <a href="/camara/{{publicaciones.camara}}">
+            <p>Camara: {{ camara.marca}} - {{ camara.modelo}}</p>
+          </a>
+          <a href="/album/{{publicaciones.album}}">
+            <p *ngIf="album">Album: {{ album.nombre_album}}</p>
+          </a>
+        </div>
+
+        <p>A {{numReacciones}} le ha gustado esta foto</p>
+
+
+
+
+      </div>
+    </div>
+  </div>
+</div>
