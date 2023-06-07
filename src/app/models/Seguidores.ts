@@ -3,4 +3,5 @@ export interface Seguidores {
   usuario_envia: number;
   usuario_recibe: number;
   fecha_amistad: Date;
+
 }

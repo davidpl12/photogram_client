@@ -1,0 +1,104 @@
+$color-blue: #004AAD;
+$colorFondo: #F4F9FF;
+
+html,body {
+  background-image: url('../../../assets/muelle-lago-hallstatt-austria.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  margin-left: -200px;
+  width: calc(100vw);
+  min-height: 100vh;
+  overflow-x: hidden; /* Oculta la barra de desplazamiento vertical */
+}
+.container {
+  width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: $colorFondo;
+}
+
+h2 {
+  font-size: 24px;
+  text-align: center;
+  margin-bottom: 20px;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+form {
+  width: 300px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+div.row {
+  display: flex;
+  justify-content: space-between;
+}
+
+div.col {
+  flex-basis: 48%; /* Ajusta el ancho de las columnas según sea necesario */
+}
+
+div {
+  margin-bottom: 10px;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+button.button-primary {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 3px;
+  background-color: $color-blue;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button[disabled] {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+span {
+  display: block;
+  margin-top: 10px;
+  text-align: center;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.808);
+
+}
+
+a {
+  color: $color-blue;
+  text-decoration: none;
+  text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.938);
+
+}
+
+a:hover {
+  text-decoration: underline;
+}
+

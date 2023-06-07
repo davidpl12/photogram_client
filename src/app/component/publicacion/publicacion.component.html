@@ -24,9 +24,7 @@
       <div>
         <label>Cámara:</label>
         <select [(ngModel)]="camara" name="camara" required>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
+          <option *ngFor="let camarita of camaras" [value]="camarita.id">{{camarita.marca}} - {{camarita.modelo}}</option>
         </select>
       </div>
       <div>
@@ -36,9 +34,8 @@
       <div>
         <label>Álbum:</label>
         <select [(ngModel)]="album" name="album" required>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
+          <option *ngFor="let albumes of albumes" [value]="albumes.id">{{albumes.nombre_album}}</option>
+
         </select>
       </div>
       <div>

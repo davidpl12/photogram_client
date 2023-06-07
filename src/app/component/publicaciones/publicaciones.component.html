@@ -1,0 +1,25 @@
+<h2>Usuarios</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Autor</th>
+      <th>Descripcion</th>
+      <th>Imagen</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let usuario of usuarios">
+      <td>{{ usuario.id }}</td>
+      <td><a href="/usuarios/{{ usuario.autor }}">{{ usuario.autor }}</a></td>
+      <td>{{ usuario.descripcion }}</td>
+      <td><img src="{{url}}{{ usuario.imagen }}" alt=""> </td>
+      <td>
+        <button class="eliminar" (click)="eliminarPublicaciones(usuario.id)">Eliminar</button>
+        <button class="editar" (click)="editarPublicaciones(usuario.id)">Editar</button>
+      </td>
+    </tr>
+  </tbody>
+</table>

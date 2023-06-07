@@ -73,7 +73,7 @@ body {
         .dropdown-content {
           display: none;
           position: absolute;
-          top: -100%;
+          top: -50%;
           left: 100%;
           z-index: 1;
           background-color: #f9f9f9;
@@ -112,21 +112,49 @@ body {
     display: flex;
     align-items: center;
     margin-top: 20px;
-    span{
+
+    .profile-link {
+      position: relative;
+
+      &:hover .profile-options {
+        display: block;
+      }
+    }
+
+    span {
       color: $color-blue;
       font-weight: bold;
     }
 
+    .profile-image {
+      width: $profile-image-size;
+      height: $profile-image-size;
+      border-radius: $profile-image-border-radius;
+      margin-right: 10px;
+    }
+
+    .profile-options {
+      display: none;
+          position: absolute;
+          top: -50%;
+          left: 100%;
+          z-index: 9999;
+          background-color: #f9f9f9;
+          min-width: 160px;
+          padding: 8px;
+          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+
+      li {
+        list-style-type: none;
+        margin-bottom: 5px;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
   }
 
-
-
-  .profile-image {
-    width: $profile-image-size;
-    height: $profile-image-size;
-    border-radius: $profile-image-border-radius;
-    margin-right: 10px;
-  }
 }
 
 

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Camara } from 'src/app/models/Camara';
 import { PublicacionesService } from 'src/app/services/publicaciones.service';
@@ -8,8 +8,16 @@ import { PublicacionesService } from 'src/app/services/publicaciones.service';
   templateUrl: './camaras.component.html',
   styleUrls: ['./camaras.component.scss'],
 })
-export class CamarasComponent {
-  camara: Camara[] = [];
+export class CamarasComponent implements OnInit {
+  camaras: Camara[] = [];
+  showModal: boolean = false;
+  userRole = localStorage.getItem('userRole');
+
+
+  marca: string = '';
+  modelo: string = '';
+  descripcion: string = '';
+  valoracion: number = 0;
 
   constructor(
     private publicacionService: PublicacionesService,
@@ -21,11 +29,11 @@ export class CamarasComponent {
 
     if (verificationToken !== null) {
       this.publicacionService.getCamaras(verificationToken).subscribe(
-        (camara) => {
-          this.camara = camara;
+        (camaras) => {
+          this.camaras = camaras;
         },
         (error) => {
-          console.error('Error al obtener los datos de la camara', error);
+          console.error('Error al obtener los datos de las cámaras', error);
         }
       );
     } else {
@@ -33,7 +41,65 @@ export class CamarasComponent {
     }
   }
 
-  verdetalles(idPublicacion: Number) {
+  verDetalles(idPublicacion: number) {
     this.router.navigate([`/camara/${idPublicacion}`]);
+  }
+
+  eliminarCamara(idCamara: number) {
+    if (confirm('¿Estás seguro de que deseas eliminar esta cámara?')) {
+      const verificationToken = localStorage.getItem('verificationToken');
+
+      if (verificationToken !== null) {
+      this.publicacionService.eliminarCamara(idCamara,verificationToken).subscribe(
+        () => {
+          // Eliminación exitosa, actualizar la lista de cámaras
+          this.camaras = this.camaras.filter((camara) => camara.id !== idCamara);
+        },
+        (error) => {
+          console.error('Error al eliminar la cámara', error);
+        }
+      );
+    }
+  } else {
+    // Manejar el caso cuando el token de verificación es null
+    console.error('Token de verificación nulo');
+  }
+  }
+
+  abrirModalCrearCamara() {
+    this.showModal = true;
+  }
+
+  cerrarModalCrearCamara() {
+    this.showModal = false;
+  }
+
+  crearCamara(): void {
+    const verificationToken = localStorage.getItem('verificationToken');
+
+    if (verificationToken !== null) {
+      const formData = new FormData();
+      formData.append('marca', this.marca);
+      formData.append('modelo', this.modelo);
+      formData.append('descripcion', this.descripcion);
+      formData.append('valoracion', String(this.valoracion));
+
+      this.publicacionService
+        .crearCamara(formData, verificationToken)
+        .subscribe(
+          (response) => {
+            // Manejar la respuesta del servidor
+            console.log('Camara creada');
+            this.cerrarModalCrearCamara();
+          },
+          (error) => {
+            // Manejar el error
+            console.error('Error al crear la camara', error);
+          }
+        );
+    } else {
+      // Manejar el caso cuando el token de verificación es null
+      console.error('Token de verificación nulo');
+    }
   }
 }

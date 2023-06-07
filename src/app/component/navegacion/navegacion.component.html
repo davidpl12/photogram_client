@@ -13,7 +13,7 @@
     </a>
     </div>
     <div class="menu-item">
-      <a href="">
+      <a href="/busquedad">
         <svg xmlns="http://www.w3.org/2000/svg" class="bi bi-search size-icon" viewBox="0 0 16 16">
           <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
         </svg>
@@ -50,19 +50,21 @@
       </svg>
       <span>Admin</span>
       <div class="dropdown-content">
-        <a href="#">Opción 1</a>
-        <a href="#">Opción 2</a>
-        <a href="#">Opción 3</a>
+        <a href="/usuarios">Control usuarios</a>
+        <a href="/publicaciones">Control publicaciones</a>
       </div>
     </div>
 
   </div>
   <div class="profile">
-    <a href="/perfil">
+    <a href="/perfil" class="profile-link">
       <img *ngIf="userData" class="profile-image" src="{{url}}{{userData.foto_perfil}}" onerror="this.src='https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'" alt="Imagen de perfil">
       <span>Mi perfil</span>
+      <ul class="profile-options">
+       <a *ngIf="userData" href="/usuarios/{{userData.id}}"><li>Editar</li></a>
+       <a href="/logout"><li>Cerrar Sesión</li></a>
+      </ul>
     </a>
-
   </div>
 </div>
 

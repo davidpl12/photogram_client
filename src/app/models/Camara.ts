@@ -5,10 +5,7 @@ export interface Camara {
   descripcion: string;
   valoracion: number;
 
-    // Constructor
-    constructor() : {
 
-    }
 
 }
 

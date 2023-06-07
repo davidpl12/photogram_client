@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, catchError, throwError } from 'rxjs';
 import { Publicacion } from '../models/Publicacion';
 import { Camara } from '../models/Camara';
@@ -35,7 +35,9 @@ export class PublicacionesService {
       const headers = new HttpHeaders({
         Authorization: `Bearer ${token}`,
       });
-      return this.http.get<Publicacion>(`${this.apiUrl}/publicaciones/${id}`, { headers });
+      return this.http.get<Publicacion>(`${this.apiUrl}/publicaciones/${id}`, {
+        headers,
+      });
     } else {
       // Manejar el caso cuando el token es null
       // Por ejemplo, puedes devolver un Observable vacío o lanzar un error
@@ -73,23 +75,43 @@ export class PublicacionesService {
         { headers }
       );
     } else {
-      // Manejar el caso cuando el token es null
-      // Por ejemplo, puedes devolver un Observable vacío o lanzar un error
+
       return throwError('Token de autenticación nulo');
     }
   }
 
   // Actualizar una publicación existente
-  actualizarPublicacion(publicacion: Publicacion): Observable<Publicacion> {
-    return this.http.put<Publicacion>(
-      `${this.apiUrl}/publicaciones/${publicacion.id}`,
-      publicacion
-    );
+  actualizarPublicacion(id: number, publicacion: FormData, token: string): Observable<Publicacion> {
+    if (token !== null) {
+      const headers = new HttpHeaders({
+        Authorization: `Bearer ${token}`,
+      });
+
+      return this.http.put<Publicacion>(
+        `${this.apiUrl}/publicaciones/${id}`,
+        publicacion,
+        { headers }
+      ).pipe(
+        catchError((error) => {
+          console.error('Error al actualizar la publicación', error);
+          return throwError('Error al actualizar la publicación');
+        })
+      );
+    } else {
+      return throwError('Token de autenticación nulo');
+    }
   }
 
   // Eliminar una publicación
-  eliminarPublicacion(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/publicaciones/${id}`);
+  eliminarPublicacion(id: number, token: string): Observable<void> {
+    if (token !== null) {
+      const headers = new HttpHeaders({
+        Authorization: `Bearer ${token}`,
+      });
+    return this.http.delete<void>(`${this.apiUrl}/publicaciones/${id}`, { headers });
+  } else {
+    return throwError('Token de autenticación nulo');
+  }
   }
 
   getNumSeguidores(idRecibe: number, token: string): Observable<any> {
@@ -159,7 +181,9 @@ export class PublicacionesService {
       });
 
       return this.http
-        .get<any>(`${this.apiUrl}/publicaciones/camara/${idCamara}`, { headers })
+        .get<any>(`${this.apiUrl}/publicaciones/camara/${idCamara}`, {
+          headers,
+        })
         .pipe(
           catchError((error: any) => {
             console.error('Error al obtener los datos de los seguidos', error);
@@ -219,7 +243,28 @@ export class PublicacionesService {
       return throwError('Token de autenticación nulo');
     }
   }
+  crearCamara(camara: FormData, token: string): Observable<any> {
+    if (token !== null) {
+      const headers = new HttpHeaders({
+        Authorization: `Bearer ${token}`,
+      });
+      const url = `${this.apiUrl}/camaras`;
+      return this.http.post(url, camara, { headers });
+    } else {
+      return throwError('Token de autenticación nulo');
+    }
+  }
 
+  eliminarCamara(id: number, token: string): Observable<void> {
+    if (token !== null) {
+      const headers = new HttpHeaders({
+        Authorization: `Bearer ${token}`,
+      });
+    return this.http.delete<void>(`${this.apiUrl}/camaras/${id}`, { headers });
+  } else {
+    return throwError('Token de autenticación nulo');
+  }
+  }
 
   //ALBUMES
   getAlbumes(token: string): Observable<Album[]> {
@@ -288,10 +333,6 @@ export class PublicacionesService {
     }
   }
 
-  verificarReaccion(userId: number, publicacionId: number): Observable<boolean> {
-    return this.http.get<boolean>(`/reacciones/verificar/${userId}/${publicacionId}`);
-  }
-
   getNumReacciones(idPublicacion: number, token: string): Observable<any> {
     if (token !== null) {
       const headers = new HttpHeaders({
@@ -299,15 +340,40 @@ export class PublicacionesService {
       });
 
       return this.http
-        .get<any>(`${this.apiUrl}/reacciones/numero/${idPublicacion}`, { headers })
+        .get<any>(`${this.apiUrl}/reacciones/numero/${idPublicacion}`, {
+          headers,
+        })
         .pipe(
           catchError((error: any) => {
-            console.error('Error al obtener los datos de las reacciones', error);
+            console.error(
+              'Error al obtener los datos de las reacciones',
+              error
+            );
             return throwError('Error al obtener los datos de la publicacion');
           })
         );
     } else {
       return throwError('Token de autenticación nulo');
     }
+  }
+
+  darMeGusta(publicacionId: number, usuarioId: number) {
+    const url = `${this.apiUrl}/me-gusta`;
+
+    return this.http.post(url, { publicacionId, usuarioId });
+  }
+
+  quitarMeGusta(publicacionId: number, usuarioId: number) {
+    const url = `${this.apiUrl}/no-me-gusta`;
+
+    return this.http.delete(url, { body: { publicacionId, usuarioId } });
+  }
+
+  verificarMeGusta(
+    usuarioId: number,
+    publicacionId: number
+  ): Observable<boolean> {
+    const url = `${this.apiUrl}/verificar-megusta/${usuarioId}/${publicacionId}`;
+    return this.http.get<boolean>(url);
   }
 }

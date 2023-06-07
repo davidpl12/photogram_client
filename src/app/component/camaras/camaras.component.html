@@ -1,11 +1,54 @@
+<div class="container">
+<button *ngIf="userRole == '1'" class="btn-create" (click)="abrirModalCrearCamara()">Crear Nueva Cámara</button>
+</div>
+
 <div class="cameras-cards">
-    <div *ngFor="let camara of camara" class="camera-card">
-      <div class="camera-info" (click)="verdetalles(camara.id)">
-        <h2 class="camera-brand">{{camara.marca}}</h2>
-        <h3 class="camera-model">{{camara.modelo}}</h3>
-        <p class="camera-description">{{camara.descripcion}}</p>
-        <p class="camera-rating">Valoración: {{camara.valoracion}}/5</p>
-      </div>
+  <div *ngFor="let camara of camaras" class="camera-card">
+    <div class="camera-info" (click)="verDetalles(camara.id)">
+      <h2 class="camera-brand">{{ camara.marca }}</h2>
+      <h3 class="camera-model">{{ camara.modelo }}</h3>
+      <p class="camera-description">{{ camara.descripcion }}</p>
+      <p class="camera-rating">Valoración: {{ camara.valoracion }}/5</p>
     </div>
+    <button *ngIf="userRole == '1'" class="btn-delete" (click)="eliminarCamara(camara.id)">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+        <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
+      </svg>
+    </button>
   </div>
+</div>
+
+<div *ngIf="showModal" class="modal-overlay">
+  <div class="modal-content">
+    <h2>Crear Nueva Cámara</h2>
+    <form (submit)="crearCamara()">
+      <div class="form-group">
+        <label for="marca">Marca:</label>
+        <input type="text" id="marca" name="marca" [(ngModel)]="marca" required>
+      </div>
+      <div class="form-group">
+        <label for="modelo">Modelo:</label>
+        <input type="text" id="modelo" name="modelo" [(ngModel)]="modelo" required>
+      </div>
+      <div class="form-group">
+        <label for="descripcion">Descripción:</label>
+        <textarea id="descripcion" name="descripcion" [(ngModel)]="descripcion" required></textarea>
+      </div>
+      <div class="form-group">
+        <label for="valoracion">Valoración:</label>
+        <input type="number" id="valoracion" name="valoracion" [(ngModel)]="valoracion" required>
+      </div>
+      <div class="botones">
+        <button type="submit">Crear</button>
+        <button (click)="cerrarModalCrearCamara()">Cerrar</button>
+      </div>
+
+
+    </form>
+  </div>
+</div>
+
+
+
+
 

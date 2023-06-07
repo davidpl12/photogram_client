@@ -1,0 +1,25 @@
+<h2>Usuarios</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nombre</th>
+      <th>Email</th>
+      <th>User</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let usuario of usuarios">
+      <td>{{ usuario.id }}</td>
+      <td>{{ usuario.nombre }}</td>
+      <td>{{ usuario.email }}</td>
+      <td>{{ usuario.user }}</td>
+      <td>
+        <button class="eliminar" (click)="eliminarUsuario(usuario.id)">Eliminar</button>
+        <button class="editar" (click)="editarUsuario(usuario.id)">Editar</button>
+      </td>
+    </tr>
+  </tbody>
+</table>

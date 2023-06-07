@@ -1,5 +1,7 @@
 <div class="contenedor">
-  <app-navegacion></app-navegacion>
+  <ng-container *ngIf="guardianActivado">
+    <app-navegacion></app-navegacion>
+  </ng-container>
   <router-outlet class="margen"></router-outlet>
 </div>
 

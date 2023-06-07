@@ -16,7 +16,7 @@ import { Album } from 'src/app/models/Album';
 })
 export class InicioPostComponent implements OnInit {
   isLoading: boolean = true;
-  numReacciones: number = 0;
+  //numReacciones: number = 0;
 
   publicaciones: Publicacion[] = [];
   userData: Usuario | undefined;
@@ -28,7 +28,10 @@ export class InicioPostComponent implements OnInit {
   url: string = 'http://127.0.0.1:8000/img/publicaciones/';
   url_perfil: string = 'http://127.0.0.1:8000/img/perfil/';
   userRole = localStorage.getItem('userRole');
+  usuario_id = localStorage.getItem('id_user');
   publicacionesConUsuarios: any[] | undefined; // Array de publicaciones con nombres de usuarios
+
+
 
   constructor(
     private authService: AuthService,
@@ -38,8 +41,18 @@ export class InicioPostComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.isLoading = true;
 
+      //this.obtenerNumReaccion(this.publicacionId);
+
+
+    this.isLoading = true;
+    this.obtenerPublicacionesConUsuarios();
+
+
+  }
+
+
+  obtenerPublicacionesConUsuarios(): void {
     const verificationToken = localStorage.getItem('verificationToken');
 
     if (verificationToken !== null) {
@@ -49,106 +62,83 @@ export class InicioPostComponent implements OnInit {
 
           const usuarioId = userData.id; // Obtener el ID del usuario desde los datos del usuario
 
-          this.publicacionService
-            .getSeguidos(usuarioId, verificationToken)
-            .subscribe(
-              (seguidos) => {
-                this.seguidos = seguidos;
-                this.seguidos.forEach((objeto) => {
-                  {
-                    this.publicacionService
-                      .getAutorPublicacion(
-                        objeto.usuario_recibe,
-                        verificationToken
-                      )
-                      .subscribe(
-                        (publicaciones) => {
-                          this.publicaciones = publicaciones;
-                          this.publicaciones.forEach((publicacion) => {
-                            this.publiFiltradas.push(publicacion);
+          this.publicacionService.getSeguidos(usuarioId, verificationToken).subscribe(
+            (seguidos) => {
+              this.seguidos = seguidos;
+              this.seguidos.forEach((objeto) => {
+                this.publicacionService.getAutorPublicacion(objeto.usuario_recibe, verificationToken).subscribe(
+                  (publicaciones) => {
+                    this.publicaciones = publicaciones;
+                    this.publicaciones.forEach((publicacion) => {
+                      this.publiFiltradas.push(publicacion);
 
-                            // Obtener el nombre del usuario que hizo la foto
-                            const nombreUsuario = publicacion.autor;
-                            console.log(nombreUsuario);
-                          });
-                        },
-                        (error) => {
-                          console.error(
-                            'Error al obtener las publicaciones del usuario',
-                            error
-                          );
-                        }
-                      );
-                  }
-                });
-                console.log(this.publiFiltradas);
-                this.publiFiltradas.sort((a, b) => {
-                  const fechaA = new Date(a.fecha_public);
-                  const fechaB = new Date(b.fecha_public);
-                  return fechaA.getTime() - fechaB.getTime();
-                });
+                      // Obtener el nombre del usuario que hizo la foto
+                      const nombreUsuario = publicacion.autor;
+                      console.log(nombreUsuario);
 
-                console.log(this.publiFiltradas);
+                      // Verificar si al usuario le gusta la publicación
+                      this.verificarMeGusta(publicacion);
 
-                // Obtener datos adicionales del autor
-                this.usuariosService.getUsuarios(verificationToken).subscribe(
-                  (autor) => {
-                    this.autor = autor;
-                    // Obtener datos adicionales de camara
-                    this.publicacionService
-                      .getCamaras(verificationToken)
-                      .subscribe(
-                        (camara) => {
-                          this.camara = camara;
-                          this.publicacionService
-                            .getAlbumes(verificationToken)
-                            .subscribe(
-                              (album) => {
-                                this.album = album;
-                                console.log(this.album);
-
-                                this.publicacionesConUsuarios =
-                                  this.unirPublicacionesConUsuarios(
-                                    this.publiFiltradas,
-                                    this.autor,
-                                    this.camara,
-                                    this.album
-                                  );
-                                console.log(this.publicacionesConUsuarios);
-                                this.isLoading = false;
-                              },
-                              (error) => {
-                                console.error(
-                                  'Error al obtener los datos del Album',
-                                  error
-                                );
-                                this.isLoading = false;
-                              }
-                            );
-                        },
-                        (error) => {
-                          console.error(
-                            'Error al obtener los datos de la camara',
-                            error
-                          );
-                        }
-                      );
+                      this.obtenerNumReaccion(publicacion);
+                    });
                   },
                   (error) => {
-                    console.error(
-                      'Error al obtener los datos del autor',
-                      error
-                    );
+                    console.error('Error al obtener las publicaciones del usuario', error);
                   }
                 );
-              },
-              (error) => {
-                console.error(
-                  'Error al obtener el numero de seguidores',
-                  error
-                );
-              }
-            );
+              });
+              console.log(this.publiFiltradas);
+              this.publiFiltradas.sort((a, b) => {
+                const fechaA = new Date(a.fecha_public);
+                const fechaB = new Date(b.fecha_public);
+                return fechaA.getTime() - fechaB.getTime();
+              });
+
+              console.log(this.publiFiltradas);
+
+              // Obtener datos adicionales del autor
+              this.usuariosService.getUsuarios(verificationToken).subscribe(
+                (autor) => {
+                  this.autor = autor;
+                  // Obtener datos adicionales de camara
+                  this.publicacionService.getCamaras(verificationToken).subscribe(
+                    (camara) => {
+                      this.camara = camara;
+                      this.publicacionService.getAlbumes(verificationToken).subscribe(
+                        (album) => {
+                          this.album = album;
+                          console.log(this.album);
+
+                          this.publicacionesConUsuarios = this.unirPublicacionesConUsuarios(
+                            this.publiFiltradas,
+                            this.autor,
+                            this.camara,
+                            this.album
+                          );
+
+                          console.log(this.publicacionesConUsuarios);
+                          this.isLoading = false;
+                        },
+                        (error) => {
+                          console.error('Error al obtener los datos del Album', error);
+                          this.isLoading = false;
+                        }
+                      );
+                    },
+                    (error) => {
+                      console.error('Error al obtener los datos de la camara', error);
+                    }
+                  );
+                },
+                (error) => {
+                  console.error('Error al obtener los datos del autor', error);
+                }
+              );
+            },
+            (error) => {
+              console.error('Error al obtener el numero de seguidores', error);
+            }
+          );
         },
         (error) => {
           console.error('Error al obtener los datos del usuario', error);
@@ -158,12 +148,9 @@ export class InicioPostComponent implements OnInit {
       console.error('Token de verificación nulo');
     }
   }
-  unirPublicacionesConUsuarios(
-    publicaciones: any[],
-    usuarios: any[],
-    camaras: any[],
-    albumes: any[]
-  ): any[] {
+
+
+  unirPublicacionesConUsuarios(publicaciones: any[], usuarios: any[], camaras: any[], albumes: any[]): any[] {
     return publicaciones.map((publicacion) => {
       const usuario = usuarios.find((u) => u.id === publicacion.autor);
       const camara = camaras.find((u) => u.id === publicacion.camara);
@@ -179,64 +166,79 @@ export class InicioPostComponent implements OnInit {
     });
   }
 
-  public meGusta = false;
+  darMeGusta(publicacion: any) {
+    if (publicacion && publicacion.id) {
 
-  agregarReaccion(userId: number, publicacionId: number) {
-    const verificationToken = localStorage.getItem('verificationToken');
+    const publicacionId = publicacion.id;
+    if (this.usuario_id) {
+      this.publicacionService.darMeGusta(publicacionId, parseInt(this.usuario_id)).subscribe(
+        (response: any) => {
+          console.log(response.message);
+          publicacion.meGusta = true;
+          this.obtenerNumReaccion(publicacion);
+        },
+        (error: any) => {
+          console.error('Error al dar "me gusta":', error);
+        }
+      );
+    }
+  }
+  }
 
-    // Crear un nuevo objeto de reacción
-    const nuevaReaccion = {
-      user: userId,
-      publicacion: publicacionId,
-      fecha_reaccion: new Date().toISOString(),
-    };
+  quitarMeGusta(publicacion: any) {
+    if (publicacion && publicacion.id) {
 
-    if (verificationToken !== null) {
-      if (!this.meGusta) {
-        // Llamar al servicio para crear la nueva reacción
-        this.publicacionService
-          .crearReaccion(nuevaReaccion, verificationToken)
-          .subscribe(
-            (respuesta) => {
-              console.log('Se ha agregado una nueva reacción');
-              this.meGusta = true; // Cambiar el estado de la reacción a "Me gusta"
-            },
-            (error) => {
-              console.error('Error al agregar la reacción', error);
-            }
-          );
-      } else {
-        // Llamar al servicio para eliminar la reacción
-        this.publicacionService
-          .eliminarReaccion(userId, publicacionId, verificationToken)
-          .subscribe(
-            (respuesta) => {
-              console.log('Se ha eliminado la reacción');
-              this.meGusta = false; // Cambiar el estado de la reacción a "No me gusta"
-            },
-            (error) => {
-              console.error('Error al eliminar la reacción', error);
-            }
-          );
-      }
+    const publicacionId = publicacion.id;
+    if (this.usuario_id) {
+      this.publicacionService.quitarMeGusta(publicacionId, parseInt(this.usuario_id)).subscribe(
+        (response: any) => {
+          console.log(response.message);
+          publicacion.meGusta = false;
+          this.obtenerNumReaccion(publicacion);
+        },
+        (error: any) => {
+          console.error('Error al quitar "me gusta":', error);
+        }
+      );
+    }
+  }
+  }
+
+  verificarMeGusta(publicacion: any): void {
+    const publicacionId = publicacion.id;
+    const usuarioId = this.usuario_id;
+    if (usuarioId) {
+      this.publicacionService.verificarMeGusta(parseInt(usuarioId), parseInt(publicacionId) ).subscribe(
+        (response: boolean) => {
+          publicacion.meGusta = response;
+          console.log("Usuario:" + usuarioId)
+          console.log("Publicacion" + publicacionId)
+
+          console.log(response)
+        },
+        (error: any) => {
+          console.error(`Error al verificar si te gusta la publicación ${publicacionId}:`, error);
+        }
+      );
     }
   }
 
-  obtenerNumReaccion(idPublicacion: number) {
+  obtenerNumReaccion(publicacion: any) {
+    const idPublicacion = publicacion.id;
     const verificationToken = localStorage.getItem('verificationToken');
     if (verificationToken !== null) {
-      //GET NUMERO DE REACCIONES
-      this.publicacionService
-        .getNumReacciones(idPublicacion, verificationToken)
-        .subscribe(
-          (numReacciones) => {
-            this.numReacciones = numReacciones.num_reacciones;
-          },
-          (error) => {
-            console.error('Error al obtener el numero de seguidores', error);
-          }
-        );
+      // GET NUMERO DE REACCIONES
+      this.publicacionService.getNumReacciones(idPublicacion, verificationToken).subscribe(
+        (numReacciones) => {
+          publicacion.num_reacciones = numReacciones.num_reaccion;
+          console.log("REACCIONES:" + publicacion.num_reacciones)
+        },
+        (error) => {
+          console.error('Error al obtener el numero de seguidores', error);
+        }
+      );
     }
-    //GET NUMERO DE REACCIONES
+    // GET NUMERO DE REACCIONES
   }
+
 }

@@ -9,4 +9,5 @@ export interface Publicacion {
   num_reacciones: number;
   album: string;
   fecha_public: Date;
+  meGusta: boolean;
 }

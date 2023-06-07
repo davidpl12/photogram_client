@@ -1,0 +1,41 @@
+<form (ngSubmit)="actualizarPublicacion()" enctype="multipart/form-data">
+  <div>
+    <label>autor:</label>
+    <input type="text" [(ngModel)]="autor" name="autor">
+  </div>
+  <div>
+    <label>Descripción:</label>
+    <textarea [(ngModel)]="descripcion" name="descripcion" required></textarea>
+  </div>
+  <div>
+    <label>Lugar de realización:</label>
+    <input type="text" [(ngModel)]="lugarRealizacion" name="lugarRealizacion" required>
+  </div>
+  <div>
+    <label>Licencia:</label>
+    <select [(ngModel)]="licencia" name="licencia" required>
+      <option value="Creative Commons">Creative Commons</option>
+      <option value="Public Domain">Public Domain</option>
+    </select>
+  </div>
+  <div>
+    <label>Cámara:</label>
+    <select [(ngModel)]="camara" name="camara" required>
+      <option *ngFor="let camarita of camaras" [value]="camarita.id">{{camarita.marca}} - {{camarita.modelo}}</option>
+    </select>
+  </div>
+  <div>
+    <label>Imagen:</label>
+    <input type="file" (change)="onFileSelected($event)" name="imagen" required>
+  </div>
+  <div>
+    <label>Álbum:</label>
+    <select [(ngModel)]="album" name="album" required>
+      <option *ngFor="let albumes of albumes" [value]="albumes.id">{{albumes.nombre_album}}</option>
+    </select>
+  </div>
+  <div>
+    <button type="submit">Actualizar Publicación</button>
+    <button type="reset">Cancelar</button>
+  </div>
+</form>

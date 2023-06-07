@@ -1,0 +1,51 @@
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+button {
+
+
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+.editar{
+  padding: 4px 8px;
+  color: white;
+  border: none;
+  cursor: pointer;
+  background-color: #4caf50;
+
+}
+.editar:hover {
+  background-color: #2d6e30;
+}
+
+button{
+  border-radius: 20px;
+}
+
+.eliminar{
+  margin-right: 10px;
+  padding: 4px 8px;
+  color: white;
+  border: none;
+  cursor: pointer;
+  background-color: #eb2e0d;
+
+}
+.eliminar:hover {
+  background-color: #9e1c06;
+}

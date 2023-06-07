@@ -1,0 +1,70 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: calc(100vw - 220px) ;
+  height: 100vh;
+  margin-top: 20px;
+}
+.search-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.search-input {
+  width: 300px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.user-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.user-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-username {
+  font-weight: bold;
+}
+
+.user-name {
+  color: #777;
+}
+
+.follow-button {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #0080ff;
+  color: #fff;
+  cursor: pointer;
+}
+
+.followed {
+  background-color: #ccc;
+  cursor: pointer;
+
+}

@@ -2,6 +2,7 @@ import { Usuario } from './../models/Usuario';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
+import { Roles } from '../models/Roles';
 
 @Injectable({
   providedIn: 'root'
@@ -11,41 +12,63 @@ export class UsuariosService {
 
   constructor(private http: HttpClient) {}
 
+  private getHeaders(token: string): HttpHeaders {
+    if (token) {
+      return new HttpHeaders({
+        Authorization: `Bearer ${token}`,
+      });
+    } else {
+      throw new Error('Token de autenticación nulo');
+    }
+  }
+
   getUsuarios(token: string): Observable<Usuario[]> {
-    if (token !== null) {
-      const headers = new HttpHeaders({
-        Authorization: `Bearer ${token}`,
-      });
+    const headers = this.getHeaders(token);
     return this.http.get<Usuario[]>(`${this.apiUrl}/usuarios`, { headers });
-  } else {
-    // Manejar el caso cuando el token es null
-    // Por ejemplo, puedes devolver un Observable vacío o lanzar un error
-    return throwError('Token de autenticación nulo');
-  }
   }
 
-  getUsuario(id: number, token:string): Observable<Usuario> {
-    if (token !== null) {
-      const headers = new HttpHeaders({
-        Authorization: `Bearer ${token}`,
-      });
+  getUsuario(id: number, token: string): Observable<Usuario> {
+    const headers = this.getHeaders(token);
     return this.http.get<Usuario>(`${this.apiUrl}/usuarios/${id}`, { headers });
-  } else {
-    // Manejar el caso cuando el token es null
-    // Por ejemplo, puedes devolver un Observable vacío o lanzar un error
-    return throwError('Token de autenticación nulo');
-  }
   }
 
-  crearUsuario(usuario: Usuario): Observable<Usuario> {
-    return this.http.post<Usuario>(`${this.apiUrl}/usuarios`, usuario);
+  crearUsuario(usuario: Usuario, token: string): Observable<Usuario> {
+    const headers = this.getHeaders(token);
+    return this.http.post<Usuario>(`${this.apiUrl}/usuarios`, usuario, { headers });
   }
 
-  actualizarUsuario(usuario: Usuario): Observable<Usuario> {
-    return this.http.put<Usuario>(`${this.apiUrl}/usuarios/${usuario.id}`, usuario);
+  actualizarUsuario(usuario: Usuario, token: string): Observable<Usuario> {
+    const headers = this.getHeaders(token);
+    return this.http.put<Usuario>(`${this.apiUrl}/usuarios/${usuario.id}`, usuario, { headers });
   }
 
-  eliminarUsuario(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/usuarios/${id}`);
+  eliminarUsuario(id: number, token: string): Observable<void> {
+    const headers = this.getHeaders(token);
+    return this.http.delete<void>(`${this.apiUrl}/usuarios/${id}`, { headers });
   }
+
+  getRoles(token: string): Observable<Roles[]> {
+    const headers = this.getHeaders(token);
+    return this.http.get<Roles[]>(`${this.apiUrl}/roles`, { headers });
+  }
+
+  searchUsers(keyword: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/busquedad?search=${keyword}`);
+  }
+
+  verificarSeguidor(usuarioRecibeId: number, usuarioEnviaId: number, token: string): Observable<any> {
+    const headers = this.getHeaders(token);
+
+    const url = `${this.apiUrl}/usuarios/${usuarioRecibeId}/verificar-seguidor/${usuarioEnviaId}`;
+    return this.http.get<any>(url, { headers });
+  }
+
+  seguir(usuarioRecibeId: number, usuarioEnviaId: number ) {
+    return this.http.post<any>(`${this.apiUrl}/usuarios/seguir`, { usuarioRecibeId, usuarioEnviaId });
+  }
+
+  dejarSeguir(usuarioRecibeId: number, usuarioEnviaId: number) {
+    return this.http.post<any>(`${this.apiUrl}/usuarios/dejar-seguir`, { usuarioRecibeId, usuarioEnviaId });
+  }
+
 }

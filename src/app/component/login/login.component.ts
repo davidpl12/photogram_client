@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
+import { Location } from '@angular/common';
 
 
 @Component({
@@ -12,7 +13,7 @@ export class LoginComponent {
   email: string = '';
   password: string = '';
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router, private location: Location) {}
 
   login(): void {
     this.authService.login(this.email, this.password).subscribe(
@@ -30,6 +31,10 @@ export class LoginComponent {
 
         // Resto de la lógica después del inicio de sesión exitoso
         this.router.navigate(['/inicio']);
+
+
+
+
       },
       (error) => {
         // Aquí manejas los errores en caso de que ocurran durante el inicio de sesión

@@ -1,4 +1,6 @@
 $colorFondo: #F4F9FF;
+$color-blue: #004AAD;
+
 
 // Variables
 $card-width: 600px;
@@ -34,6 +36,23 @@ a {
   }
 }
 
+.btn-like {
+  background-color: transparent;
+  color: $color-blue;
+  border: none;
+
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+.btn-dislike {
+  background-color: transparent;
+  color: $color-blue;
+  border: none;
+  cursor: pointer;
+  border-radius: 10px;
+
+}
 .boton {
   display: flex;
   justify-content: center;
