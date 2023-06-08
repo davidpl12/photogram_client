@@ -8,6 +8,8 @@ import { Seguidores } from 'src/app/models/Seguidores';
 import { UsuariosService } from 'src/app/services/usuarios.service';
 import { Camara } from 'src/app/models/Camara';
 import { Album } from 'src/app/models/Album';
+import * as moment from 'moment';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-inicio-post',
@@ -31,117 +33,81 @@ export class InicioPostComponent implements OnInit {
   usuario_id = localStorage.getItem('id_user');
   publicacionesConUsuarios: any[] | undefined; // Array de publicaciones con nombres de usuarios
 
-
-
   constructor(
     private authService: AuthService,
     private publicacionService: PublicacionesService,
     private usuariosService: UsuariosService,
-    private route: ActivatedRoute
-  ) {}
+    private route: ActivatedRoute,
+    private toastr: ToastrService
+
+  ) {
+    moment.locale('es');
+  }
 
   ngOnInit(): void {
+    //this.obtenerNumReaccion(this.publicacionId);
+    if (this.usuario_id) {
+      const idUsuario = parseInt(this.usuario_id);
 
-      //this.obtenerNumReaccion(this.publicacionId);
-
-
-    this.isLoading = true;
-    this.obtenerPublicacionesConUsuarios();
-
+      this.getPublicacionesSeguidos(idUsuario);
+      this.cargarCamaras();
+      this.cargarAlbumes();
+      this.cargarUsuarios();
+    }
+    this.isLoading = false;
+    this.toastr.info('Puedes reaccionar a la imagen pulsando en el corazón y así ayudar a los demas usuarios a saber tu opinion', 'Ayuda');
 
   }
 
+  getPublicacionesSeguidos(idUsuario: number) {
+    this.publicacionService.getPublicacionesSeguidos(idUsuario).subscribe(
+      (publicacion) => {
+        this.publicaciones = publicacion;
 
-  obtenerPublicacionesConUsuarios(): void {
+        this.publicaciones.forEach((publicacion) => {
+          const horaHace = moment(publicacion.created_at)
+          .startOf('hour')
+          .fromNow();
+        publicacion.fecha_public = horaHace;
+
+        this.verificarMeGusta(publicacion);
+        this.obtenerNumReaccion(publicacion);
+        });
+
+
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  }
+
+  cargarCamaras(): void {
     const verificationToken = localStorage.getItem('verificationToken');
 
     if (verificationToken !== null) {
-      this.authService.getUserData(verificationToken).subscribe(
-        (userData) => {
-          this.userData = userData;
-
-          const usuarioId = userData.id; // Obtener el ID del usuario desde los datos del usuario
-
-          this.publicacionService.getSeguidos(usuarioId, verificationToken).subscribe(
-            (seguidos) => {
-              this.seguidos = seguidos;
-              this.seguidos.forEach((objeto) => {
-                this.publicacionService.getAutorPublicacion(objeto.usuario_recibe, verificationToken).subscribe(
-                  (publicaciones) => {
-                    this.publicaciones = publicaciones;
-                    this.publicaciones.forEach((publicacion) => {
-                      this.publiFiltradas.push(publicacion);
-
-                      // Obtener el nombre del usuario que hizo la foto
-                      const nombreUsuario = publicacion.autor;
-                      console.log(nombreUsuario);
-
-                      // Verificar si al usuario le gusta la publicación
-                      this.verificarMeGusta(publicacion);
-
-                      this.obtenerNumReaccion(publicacion);
-                    });
-                  },
-                  (error) => {
-                    console.error('Error al obtener las publicaciones del usuario', error);
-                  }
-                );
-              });
-              console.log(this.publiFiltradas);
-              this.publiFiltradas.sort((a, b) => {
-                const fechaA = new Date(a.fecha_public);
-                const fechaB = new Date(b.fecha_public);
-                return fechaA.getTime() - fechaB.getTime();
-              });
-
-              console.log(this.publiFiltradas);
-
-              // Obtener datos adicionales del autor
-              this.usuariosService.getUsuarios(verificationToken).subscribe(
-                (autor) => {
-                  this.autor = autor;
-                  // Obtener datos adicionales de camara
-                  this.publicacionService.getCamaras(verificationToken).subscribe(
-                    (camara) => {
-                      this.camara = camara;
-                      this.publicacionService.getAlbumes(verificationToken).subscribe(
-                        (album) => {
-                          this.album = album;
-                          console.log(this.album);
-
-                          this.publicacionesConUsuarios = this.unirPublicacionesConUsuarios(
-                            this.publiFiltradas,
-                            this.autor,
-                            this.camara,
-                            this.album
-                          );
-
-                          console.log(this.publicacionesConUsuarios);
-                          this.isLoading = false;
-                        },
-                        (error) => {
-                          console.error('Error al obtener los datos del Album', error);
-                          this.isLoading = false;
-                        }
-                      );
-                    },
-                    (error) => {
-                      console.error('Error al obtener los datos de la camara', error);
-                    }
-                  );
-                },
-                (error) => {
-                  console.error('Error al obtener los datos del autor', error);
-                }
-              );
-            },
-            (error) => {
-              console.error('Error al obtener el numero de seguidores', error);
-            }
-          );
+      this.publicacionService.getCamaras(verificationToken).subscribe(
+        (camaras) => {
+          this.camara = camaras;
         },
         (error) => {
-          console.error('Error al obtener los datos del usuario', error);
+          console.error('Error al obtener los datos de las cámaras', error);
+        }
+      );
+    } else {
+      console.error('Token de verificación nulo');
+    }
+  }
+  cargarAlbumes(): void {
+    const verificationToken = localStorage.getItem('verificationToken');
+
+    if (verificationToken !== null) {
+      this.publicacionService.getAlbumes(verificationToken).subscribe(
+        (albumes) => {
+          this.album = albumes;
+        },
+        (error) => {
+          console.error('Error al obtener los datos de las cámaras', error);
         }
       );
     } else {
@@ -149,77 +115,75 @@ export class InicioPostComponent implements OnInit {
     }
   }
 
+  cargarUsuarios() {
+    const verificationToken = localStorage.getItem('verificationToken');
 
-  unirPublicacionesConUsuarios(publicaciones: any[], usuarios: any[], camaras: any[], albumes: any[]): any[] {
-    return publicaciones.map((publicacion) => {
-      const usuario = usuarios.find((u) => u.id === publicacion.autor);
-      const camara = camaras.find((u) => u.id === publicacion.camara);
-      const album = albumes.find((u) => u.id === publicacion.album);
-      return {
-        ...publicacion,
-        user: usuario ? usuario.user : 'Anonimo',
-        foto_perfil: usuario ? usuario.foto_perfil : 'user.png',
-        camara_marca: camara ? camara.marca : 'Ninguna',
-        camara_modelo: camara ? camara.modelo : 'Ninguno',
-        album_nombre: album ? album.nombre_album : 'Ninguno',
-      };
-    });
-  }
-
-  darMeGusta(publicacion: any) {
-    if (publicacion && publicacion.id) {
-
-    const publicacionId = publicacion.id;
-    if (this.usuario_id) {
-      this.publicacionService.darMeGusta(publicacionId, parseInt(this.usuario_id)).subscribe(
-        (response: any) => {
-          console.log(response.message);
-          publicacion.meGusta = true;
-          this.obtenerNumReaccion(publicacion);
-        },
-        (error: any) => {
-          console.error('Error al dar "me gusta":', error);
-        }
+    if (verificationToken) {
+      this.usuariosService.getUsuarios(verificationToken).subscribe(
+        (usuarios) => (this.autor = usuarios),
+        (error) => console.log(error)
       );
     }
   }
+
+
+  darMeGusta(publicacion: any) {
+    if (publicacion && publicacion.id) {
+      const publicacionId = publicacion.id;
+      if (this.usuario_id) {
+        this.publicacionService
+          .darMeGusta(publicacionId, parseInt(this.usuario_id))
+          .subscribe(
+            (response: any) => {
+              console.log(response.message);
+              publicacion.meGusta = true;
+              this.obtenerNumReaccion(publicacion);
+            },
+            (error: any) => {
+              console.error('Error al dar "me gusta":', error);
+            }
+          );
+      }
+    }
   }
 
   quitarMeGusta(publicacion: any) {
     if (publicacion && publicacion.id) {
-
-    const publicacionId = publicacion.id;
-    if (this.usuario_id) {
-      this.publicacionService.quitarMeGusta(publicacionId, parseInt(this.usuario_id)).subscribe(
-        (response: any) => {
-          console.log(response.message);
-          publicacion.meGusta = false;
-          this.obtenerNumReaccion(publicacion);
-        },
-        (error: any) => {
-          console.error('Error al quitar "me gusta":', error);
-        }
-      );
+      const publicacionId = publicacion.id;
+      if (this.usuario_id) {
+        this.publicacionService
+          .quitarMeGusta(publicacionId, parseInt(this.usuario_id))
+          .subscribe(
+            (response: any) => {
+              console.log(response.message);
+              publicacion.meGusta = false;
+              this.obtenerNumReaccion(publicacion);
+            },
+            (error: any) => {
+              console.error('Error al quitar "me gusta":', error);
+            }
+          );
+      }
     }
-  }
   }
 
   verificarMeGusta(publicacion: any): void {
     const publicacionId = publicacion.id;
     const usuarioId = this.usuario_id;
     if (usuarioId) {
-      this.publicacionService.verificarMeGusta(parseInt(usuarioId), parseInt(publicacionId) ).subscribe(
-        (response: boolean) => {
-          publicacion.meGusta = response;
-          console.log("Usuario:" + usuarioId)
-          console.log("Publicacion" + publicacionId)
-
-          console.log(response)
-        },
-        (error: any) => {
-          console.error(`Error al verificar si te gusta la publicación ${publicacionId}:`, error);
-        }
-      );
+      this.publicacionService
+        .verificarMeGusta(parseInt(usuarioId), parseInt(publicacionId))
+        .subscribe(
+          (response: boolean) => {
+            publicacion.meGusta = response;
+          },
+          (error: any) => {
+            console.error(
+              `Error al verificar si te gusta la publicación ${publicacionId}:`,
+              error
+            );
+          }
+        );
     }
   }
 
@@ -228,17 +192,18 @@ export class InicioPostComponent implements OnInit {
     const verificationToken = localStorage.getItem('verificationToken');
     if (verificationToken !== null) {
       // GET NUMERO DE REACCIONES
-      this.publicacionService.getNumReacciones(idPublicacion, verificationToken).subscribe(
-        (numReacciones) => {
-          publicacion.num_reacciones = numReacciones.num_reaccion;
-          console.log("REACCIONES:" + publicacion.num_reacciones)
-        },
-        (error) => {
-          console.error('Error al obtener el numero de seguidores', error);
-        }
-      );
+      this.publicacionService
+        .getNumReacciones(idPublicacion, verificationToken)
+        .subscribe(
+          (numReacciones) => {
+            publicacion.num_reacciones = numReacciones.num_reaccion;
+
+          },
+          (error) => {
+            console.error('Error al obtener el numero de seguidores', error);
+          }
+        );
     }
     // GET NUMERO DE REACCIONES
   }
-
 }

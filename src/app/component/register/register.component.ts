@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
+import { ToastrService } from 'ngx-toastr';
 
 interface AvailabilityResponse {
   available: boolean;
@@ -28,7 +29,9 @@ export class RegisterComponent {
     private formBuilder: FormBuilder,
     private http: HttpClient,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private toastr: ToastrService
+
   ) {
     this.registerForm = this.formBuilder.group({
       nombre: ['', Validators.required],
@@ -70,10 +73,14 @@ export class RegisterComponent {
               if (userResponse.available) {
                 this.authService.register(formData).subscribe(
                   (response) => {
+                    this.toastr.success('Registrado con exito');
+
                     console.log('Usuario registrado');
                     this.router.navigate(['/login']);
                   },
                   (error) => {
+                    this.toastr.error(error, 'Error al registrar usuario');
+
                     console.error('Error al registrar usuario', error);
                   }
                 );
@@ -81,6 +88,8 @@ export class RegisterComponent {
                 this.userExists = true;
                 this.userAvailabilityError = userResponse.error || '';
                 console.log(this.userAvailabilityError)
+                this.toastr.error(this.userAvailabilityError, 'Este usuario ya existe');
+
               }
             },
             (error) => {
@@ -91,6 +100,8 @@ export class RegisterComponent {
           this.emailExists = true;
           this.emailAvailabilityError = emailResponse.error || '';
           console.log(this.emailAvailabilityError);
+          this.toastr.error(this.emailAvailabilityError, 'Este email ya existe');
+
         }
       },
       (error) => {

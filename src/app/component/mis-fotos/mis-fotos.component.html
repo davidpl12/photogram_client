@@ -1,0 +1,45 @@
+<div class="container">
+
+  <div>
+    <h2>Mis Fotos</h2>
+
+    <div class="button-group">
+    <button (click)="toggleMenu()">Mis cámaras</button>
+    <button (click)="toggleMenu()">Mis álbumes</button>
+     </div>
+
+    <div class="">
+      <h3 *ngIf="stateActive">Albumes</h3>
+      <h3 *ngIf="!stateActive">Camaras</h3>
+    </div>
+
+
+    <div class="photo-block" *ngIf="stateActive">
+      <div *ngFor="let camaras of camara">
+        <div *ngIf="existenPublicaciones(camaras.id)">
+          <h3>{{camaras.marca}} {{camaras.modelo}}</h3>
+
+          <div class="photos" *ngFor="let publicacion of publicaciones">
+            <div class="photo-column" *ngIf="camaras.id === +publicacion.camara">
+              <img src="{{url}}{{publicacion.imagen}}" alt="">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="photo-block" *ngIf="!stateActive">
+      <div *ngFor="let albumes of album">
+        <div *ngIf="existenPublicacionesAlbum(albumes.id)">
+          <h3>{{albumes.nombre_album}}</h3>
+
+          <div class="photos" *ngFor="let publicacion of publicaciones">
+            <div class="photo-column" *ngIf="albumes.id === +publicacion.album">
+              <img src="{{url}}{{publicacion.imagen}}" alt="">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

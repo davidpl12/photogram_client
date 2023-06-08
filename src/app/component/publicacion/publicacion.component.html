@@ -1,18 +1,19 @@
-<button (click)="openModal()">Abrir Formulario</button>
-
 <div class="contenedor">
-
-
-<div class="modal-overlay" [class.active]="modalOpen">
-  <div class="modal">
-    <form (ngSubmit)="crearPublicacion()" enctype="multipart/form-data">
+  <div class="formulario" [formGroup]="myForm">
+    <form (ngSubmit)="crearPublicacion()" method="POST" enctype="multipart/form-data">
       <div>
         <label>Descripción:</label>
         <textarea [(ngModel)]="descripcion" name="descripcion" required></textarea>
+        <div *ngIf="myForm.controls['descripcion'].invalid && (myForm.controls['descripcion'].dirty || myForm.controls['descripcion'].touched)" class="error-message">
+          Descripción es requerida.
+        </div>
       </div>
       <div>
         <label>Lugar de realización:</label>
         <input type="text" [(ngModel)]="lugarRealizacion" name="lugarRealizacion" required>
+        <div *ngIf="myForm.controls['lugarRealizacion'].invalid && (myForm.controls['lugarRealizacion'].dirty || myForm.controls['lugarRealizacion'].touched)" class="error-message">
+          Lugar de realización es requerido.
+        </div>
       </div>
       <div>
         <label>Licencia:</label>
@@ -20,29 +21,40 @@
           <option value="Creative Commons">Creative Commons</option>
           <option value="Public Domain">Public Domain</option>
         </select>
+        <div *ngIf="myForm.controls['licencia'].invalid && (myForm.controls['licencia'].dirty || myForm.controls['licencia'].touched)" class="error-message">
+          Licencia es requerida.
+        </div>
       </div>
       <div>
         <label>Cámara:</label>
         <select [(ngModel)]="camara" name="camara" required>
           <option *ngFor="let camarita of camaras" [value]="camarita.id">{{camarita.marca}} - {{camarita.modelo}}</option>
         </select>
+        <div *ngIf="myForm.controls['camara'].invalid && (myForm.controls['camara'].dirty || myForm.controls['camara'].touched)" class="error-message">
+          Cámara es requerida.
+        </div>
       </div>
       <div>
         <label>Imagen:</label>
         <input type="file" (change)="onFileSelected($event)" name="imagen" required>
+        <div *ngIf="myForm.controls['imagen'].invalid && (myForm.controls['imagen'].dirty || myForm.controls['imagen'].touched)" class="error-message">
+          Imagen es requerida.
+        </div>
       </div>
       <div>
         <label>Álbum:</label>
         <select [(ngModel)]="album" name="album" required>
           <option *ngFor="let albumes of albumes" [value]="albumes.id">{{albumes.nombre_album}}</option>
-
         </select>
+        <div *ngIf="myForm.controls['album'].invalid && (myForm.controls['album'].dirty || myForm.controls['album'].touched)" class="error-message">
+          Álbum es requerido.
+        </div>
       </div>
       <div>
         <button type="submit">Crear Publicación</button>
-        <button type="reset" (click)="closeModal()">Cancelar</button>
+        <button type="reset">Cancelar</button>
       </div>
     </form>
   </div>
 </div>
-</div>
+

@@ -1,0 +1,26 @@
+<h3>Usuarios que sigues</h3>
+<div class="container">
+  <div class="container user-container">
+
+    <div class="user-container" *ngFor="let seguidores of seguidos">
+
+      <ul class="user-list" *ngFor="let user of users">
+        <li class="user-item" *ngIf="seguidores.usuario_recibe === user.id">
+          <img class="user-avatar" *ngIf="user.foto_perfil; else defaultProfilePic" [src]="url + user.foto_perfil"
+            alt="Imagen de la publicación">
+          <ng-template #defaultProfilePic>
+            <img class="user-avatar" [src]="url + 'user.png'" alt="Foto de perfil por defecto">
+          </ng-template>
+          <div class="user-info">
+            <span class="user-username">{{ user.user }}</span>
+            <span class="user-name">{{ user.nombre }} {{ user.apellidos }}</span>
+          </div>
+          <button class="follow-button" [class.followed]="user.siguiendo" (click)="followUser(user)">
+            {{ user.siguiendo ? 'Ya seguido' : 'Seguir' }}
+          </button>
+        </li>
+      </ul>
+
+    </div>
+  </div>
+</div>

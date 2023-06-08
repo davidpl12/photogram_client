@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { Album } from 'src/app/models/Album';
 import { Publicacion } from 'src/app/models/Publicacion';
 import { PublicacionesService } from 'src/app/services/publicaciones.service';
@@ -17,7 +18,9 @@ export class AlbumDetailComponent {
 
   constructor(private publicacionesService: PublicacionesService,
     private router: Router,
-    private activatedRoute: ActivatedRoute) { }
+    private activatedRoute: ActivatedRoute,
+    private toastr: ToastrService
+    ) { }
 
   ngOnInit(): void {
     this.cargarAlbum();

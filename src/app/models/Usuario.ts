@@ -1,4 +1,5 @@
 export interface Usuario {
+  rol: any;
   siguiendo: boolean; // Propiedad para el estado de seguimiento
   id: number;
   nombre: string;

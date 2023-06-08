@@ -1,3 +1,4 @@
+import { ToastrService } from 'ngx-toastr';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Camara } from 'src/app/models/Camara';
@@ -21,7 +22,8 @@ export class CamarasComponent implements OnInit {
 
   constructor(
     private publicacionService: PublicacionesService,
-    private router: Router
+    private router: Router,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -52,10 +54,12 @@ export class CamarasComponent implements OnInit {
       if (verificationToken !== null) {
       this.publicacionService.eliminarCamara(idCamara,verificationToken).subscribe(
         () => {
-          // Eliminación exitosa, actualizar la lista de cámaras
+          this.toastr.success('Has eliminado la camara.', 'Hecho');
           this.camaras = this.camaras.filter((camara) => camara.id !== idCamara);
         },
         (error) => {
+          this.toastr.error(error, 'Error al eliminar la camara');
+
           console.error('Error al eliminar la cámara', error);
         }
       );
@@ -89,11 +93,15 @@ export class CamarasComponent implements OnInit {
         .subscribe(
           (response) => {
             // Manejar la respuesta del servidor
+            this.toastr.success('Camara creada con exito');
+
             console.log('Camara creada');
             this.cerrarModalCrearCamara();
           },
           (error) => {
             // Manejar el error
+            this.toastr.error(error, 'Error al crear la camara');
+
             console.error('Error al crear la camara', error);
           }
         );

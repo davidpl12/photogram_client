@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
 import { AppRoutingModule } from './app-routing.module';
@@ -28,12 +29,19 @@ import { UsuariosFormComponent } from './component/usuarios/usuarios-form/usuari
 import { BusquedadComponent } from './component/usuarios/busquedad/busquedad.component';
 import { PublicacionesComponent } from './component/publicaciones/publicaciones.component';
 import { PublicacionesUpdateComponent } from './component/publicaciones-update/publicaciones-update.component';
+import { MisFotosComponent } from './component/mis-fotos/mis-fotos.component';
+import { ToastrModule } from 'ngx-toastr';
+import { SeguidoresComponent } from './component/seguidores/seguidores.component';
+import { SeguidosComponent } from './component/seguidos/seguidos.component';
 
 
 
 const appRoutes: Routes = [
   //{ path: 'perfil', component: PerfilComponent },
  // { path: 'perfil', component: PerfilComponent },
+  { path: 'seguidos', component: SeguidosComponent, canActivate: [AuthGuard]  },
+  { path: 'seguidores', component: SeguidoresComponent, canActivate: [AuthGuard]  },
+  { path: 'mis-fotos', component: MisFotosComponent, canActivate: [AuthGuard]  },
   { path: 'busquedad', component: BusquedadComponent, canActivate: [AuthGuard]  },
   { path: 'usuarios/:id', component: UsuariosFormComponent, canActivate: [AuthGuard]  },
   { path: 'usuarios', component: UsuariosComponent, canActivate: [AuthGuard]  },
@@ -71,16 +79,20 @@ const appRoutes: Routes = [
     BusquedadComponent,
     PublicacionesComponent,
     PublicacionesUpdateComponent,
-
+    MisFotosComponent,
+    SeguidoresComponent,
+    SeguidosComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     RouterModule,
     RouterModule.forRoot(appRoutes),
-    FormsModule ,
+    FormsModule,
     HttpClientModule,
     ReactiveFormsModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot(), // ToastrModule added
   ],
   providers: [],
   bootstrap: [AppComponent]

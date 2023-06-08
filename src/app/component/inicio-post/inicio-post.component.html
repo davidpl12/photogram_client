@@ -19,20 +19,21 @@
         <a href="/publicacion"><button>Añadir nuevo</button></a>
       </div>
 
-      <div *ngFor="let publicacion of publicacionesConUsuarios" class="card">
-        <div class="card-header">
+      <div *ngFor="let publicacion of publicaciones" class="card">
+        <div *ngFor="let usuarios of autor">
+        <div *ngIf="publicacion.autor === usuarios.id" class="card-header">
           <div class="datos">
-            <img *ngIf="publicacion.foto_perfil; else defaultProfilePic" [src]="url_perfil + publicacion.foto_perfil"
+            <img *ngIf="usuarios.foto_perfil; else defaultProfilePic" [src]="url_perfil + usuarios.foto_perfil"
               alt="Imagen de la publicación">
             <ng-template #defaultProfilePic>
               <img [src]="url_perfil + 'user.png'" alt="Foto de perfil por defecto">
             </ng-template>
             <div class="profile-info">
               <a href="">
-                <h3 *ngIf="publicacion.autor">{{ publicacion.user }}</h3>
+                <h3 >{{ usuarios.user }}</h3>
               </a>
 
-              <span>Hace 1 hora</span>
+              <span>{{publicacion.fecha_public}}</span>
             </div>
 
 
@@ -51,18 +52,21 @@
           </div>
 
         </div>
+      </div>
         <div class="card-content">
           <a href="/publicacion/{{publicacion.id}}"><img [src]="url + publicacion.imagen" alt=""></a>
         </div>
-        <div class="card-footer">
+        <div *ngFor="let camaras of camara" >
+        <div *ngFor="let albumes of album" >
+        <div *ngIf="+publicacion.camara === camaras.id && +publicacion.album === albumes.id" class="card-footer">
 
           <p>{{ publicacion.descripcion }}</p>
           <div>
-            <a href="/camara/{{publicacion.camara}}">
-              <p>Camara: {{ publicacion.camara_marca}} - {{ publicacion.camara_modelo}}</p>
+            <a href="/camara/{{camaras.id}}">
+              <p>Camara: {{ camaras.marca}} - {{ camaras.modelo}}</p>
             </a>
-            <a href="/album/{{publicacion.album}}">
-              <p>Album: {{ publicacion.album_nombre }}</p>
+            <a href="/album/{{albumes.id}}">
+              <p>Album: {{ albumes.nombre_album }}</p>
             </a>
           </div>
 
@@ -72,6 +76,8 @@
 
 
         </div>
+      </div>
+      </div>
       </div>
     </div>
   </div>

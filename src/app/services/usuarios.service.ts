@@ -1,7 +1,7 @@
 import { Usuario } from './../models/Usuario';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { Observable, catchError, throwError } from 'rxjs';
 import { Roles } from '../models/Roles';
 
 @Injectable({
@@ -37,9 +37,9 @@ export class UsuariosService {
     return this.http.post<Usuario>(`${this.apiUrl}/usuarios`, usuario, { headers });
   }
 
-  actualizarUsuario(usuario: Usuario, token: string): Observable<Usuario> {
+  actualizarUsuario(usuario: FormData, id: number, token: string): Observable<Usuario> {
     const headers = this.getHeaders(token);
-    return this.http.put<Usuario>(`${this.apiUrl}/usuarios/${usuario.id}`, usuario, { headers });
+    return this.http.post<Usuario>(`${this.apiUrl}/usuarios/actualizar/${id}`, usuario, { headers });
   }
 
   eliminarUsuario(id: number, token: string): Observable<void> {
@@ -63,12 +63,37 @@ export class UsuariosService {
     return this.http.get<any>(url, { headers });
   }
 
-  seguir(usuarioRecibeId: number, usuarioEnviaId: number ) {
-    return this.http.post<any>(`${this.apiUrl}/usuarios/seguir`, { usuarioRecibeId, usuarioEnviaId });
+  seguir(usuarioRecibeId: number, usuarioEnviaId: number, token: string) {
+    const headers = this.getHeaders(token);
+
+    const body = {
+      usuarioRecibeId: usuarioRecibeId,
+      usuarioEnviaId: usuarioEnviaId
+    };
+
+    return this.http.post<any>(`${this.apiUrl}/usuarios/seguir`,  {usuarioRecibeId, usuarioEnviaId,headers: headers });
   }
 
-  dejarSeguir(usuarioRecibeId: number, usuarioEnviaId: number) {
-    return this.http.post<any>(`${this.apiUrl}/usuarios/dejar-seguir`, { usuarioRecibeId, usuarioEnviaId });
+
+  dejarSeguir(usuarioRecibeId: number, usuarioEnviaId: number, token : string) {
+    const headers = this.getHeaders(token);
+
+    return this.http.post<any>(`${this.apiUrl}/usuarios/dejar-seguir`, { usuarioRecibeId, usuarioEnviaId, headers });
   }
+
+  getSeguidores(idRecibe: number, token : string): Observable<any> {
+    const headers = this.getHeaders(token);
+
+    const url = `${this.apiUrl}/todosseguidores/${idRecibe}`;
+    return this.http.get(url,{ headers });
+  }
+
+  getSeguidos(idEnvia: number,token : string): Observable<any> {
+    const headers = this.getHeaders(token);
+
+    const url = `${this.apiUrl}/todosseguidos/${idEnvia}`;
+    return this.http.get(url, { headers });
+  }
+
 
 }

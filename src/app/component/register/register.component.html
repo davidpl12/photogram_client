@@ -23,9 +23,9 @@
       <div class="col">
         <label for="sexo">Sexo:</label>
         <select id="sexo" name="sexo" formControlName="sexo" required>
-          <option value="">Seleccionar</option>
-          <option value="masculino">Masculino</option>
-          <option value="femenino">Femenino</option>
+          <option value="Hombre">Hombre</option>
+        <option value="Mujer">Mujer</option>
+        <option value="Mujer">Otro</option>
         </select>
         <div *ngIf="registerForm.controls['sexo'].invalid && (registerForm.controls['sexo'].dirty || registerForm.controls['sexo'].touched)" class="error-message">
           <span *ngIf="registerForm.controls['sexo'].hasError('required')">Sexo es requerido</span>

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { Location } from '@angular/common';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -13,7 +14,8 @@ export class LogoutComponent {
   constructor(
     private router: Router,
     private authService: AuthService,
-    private location: Location
+    private location: Location,
+    private toastr: ToastrService
 
   ) {}
 
@@ -30,6 +32,7 @@ export class LogoutComponent {
           localStorage.removeItem('verificationToken');
           this.router.navigate(['/login']);
           window.location.reload();
+          this.toastr.success('Cierre de sesión exitoso');
 
           console.log(response.message); // Mostrar la respuesta en la consola
         },

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { Album } from 'src/app/models/Album';
 import { Camara } from 'src/app/models/Camara';
 import { Publicacion } from 'src/app/models/Publicacion';
@@ -30,12 +31,16 @@ export class PublicacionesUpdateComponent implements OnInit {
   constructor(
     private publicacionService: PublicacionesService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private toastr: ToastrService
+
   ) {}
 
   ngOnInit(): void {
     this.cargarAlbumes();
     this.cargarCamaras();
+
+    this.toastr.warning('La imagen no puede ocupar más de 3MB.', 'Atención');
 
     this.route.params.subscribe(params => {
       if (params['id']) {
@@ -79,7 +84,8 @@ export class PublicacionesUpdateComponent implements OnInit {
       formData.append('imagen', this.imagen);
     }
     formData.append('album', this.album);
-   console.log(formData);
+
+    console.log(formData);
 
     const verificationToken = localStorage.getItem('verificationToken');
 
@@ -90,13 +96,17 @@ export class PublicacionesUpdateComponent implements OnInit {
         .subscribe(
           (response) => {
             console.log('Publicación actualizada:', response);
+            this.toastr.success('Publicación actualizada');
 
             if (this.publicacion) {
+
               // Redirigir a la página de detalles de la publicación actualizada
               this.router.navigate(['/publicacion', this.publicacion.id]);
             }
           },
           (error) => {
+            this.toastr.error(error, 'Error al actualizar la publicación');
+
             console.error('Error al actualizar la publicación', error);
           }
         );
@@ -107,6 +117,9 @@ export class PublicacionesUpdateComponent implements OnInit {
     // Obtener el archivo seleccionado
     const file = event.target.files[0];
     this.imagen = file;
+    if (event.target.files[0].size > 3145728) {
+      this.toastr.error('La imagen ocupa más de 3MB.', 'Error');
+    }
   }
 
   cargarCamaras() {

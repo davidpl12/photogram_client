@@ -10,6 +10,7 @@ import { Camara } from 'src/app/models/Camara';
 import { Album } from 'src/app/models/Album';
 import { Seguidores } from 'src/app/models/Seguidores';
 import { UsuariosService } from 'src/app/services/usuarios.service';
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-publicacion-detail',
   templateUrl: './publicacion-detail.component.html',
@@ -33,7 +34,9 @@ export class PublicacionDetailComponent {
     private authService: AuthService,
     private publicacionesService: PublicacionesService,
     private usuariosService: UsuariosService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private toastr: ToastrService
+
   ) {}
 
   ngOnInit(): void {

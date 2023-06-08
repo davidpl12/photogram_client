@@ -1,41 +1,62 @@
 import { Component } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
+import { Seguidores } from 'src/app/models/Seguidores';
 import { Usuario } from 'src/app/models/Usuario';
 import { UsuariosService } from 'src/app/services/usuarios.service';
 
 @Component({
-  selector: 'app-busquedad',
-  templateUrl: './busquedad.component.html',
-  styleUrls: ['./busquedad.component.scss'],
+  selector: 'app-seguidores',
+  templateUrl: './seguidores.component.html',
+  styleUrls: ['./seguidores.component.scss'],
 })
-export class BusquedadComponent {
+export class SeguidoresComponent {
   url: string = 'http://127.0.0.1:8000/img/perfil/';
 
+  seguidores: Seguidores[] = [];
   users: Usuario[] = [];
   searchKeyword: string = '';
   id_envia = localStorage.getItem('id_user');
 
-  constructor(private userService: UsuariosService,     private toastr: ToastrService
-    ) {}
+  constructor(
+    private userService: UsuariosService,
+    private toastr: ToastrService
+  ) {}
 
-    ngOnInit() {
-      this.toastr.info('Pulsa en el buscador y escribe el nombre del usuario', 'Ayuda');
+  ngOnInit(): void {
+    this.cargarSeguidores();
+    this.cargarUsuarios();
+    this.toastr.info('Se mostrará el listado de usuarios que te siguen', 'Ayuda');
+
+  }
+
+  cargarSeguidores() {
+    const verificationToken = localStorage.getItem('verificationToken');
+    if (this.id_envia && verificationToken) {
+      console.log(this.id_envia);
+      const usuarioEnviaId = parseInt(this.id_envia);
+      this.userService
+        .getSeguidores(usuarioEnviaId, verificationToken)
+        .subscribe(
+          (response) => {
+            this.seguidores = response;
+            console.log('respuesta' + response);
+          },
+          (error) => console.log(error)
+        );
     }
+  }
 
-  searchUsers() {
-    if (this.searchKeyword) {
-      this.userService.searchUsers(this.searchKeyword).subscribe(
-        (data) => {
-          this.users = data;
+  cargarUsuarios() {
+    const verificationToken = localStorage.getItem('verificationToken');
+
+    if (verificationToken) {
+      this.userService.getUsuarios(verificationToken).subscribe(
+        (usuarios) => {
+          this.users = usuarios;
           this.checkSeguidores();
         },
-        (error) => {
-          console.log(error);
-        }
+        (error) => console.log(error)
       );
-    } else {
-      this.users = [];
-
     }
   }
 
@@ -69,40 +90,43 @@ export class BusquedadComponent {
       const usuarioRecibeId = user.id; // Asume que el ID del usuario está disponible en la propiedad 'id'
 
       if (user.siguiendo) {
-        const verificationToken = localStorage.getItem('verificationToken');
-        if(verificationToken){
         // Si ya lo sigue, dejar de seguirlo
         this.userService
-          .dejarSeguir(usuarioRecibeId, usuarioEnviaId,verificationToken)
+          .dejarSeguir(usuarioRecibeId, usuarioEnviaId, verificationToken)
           .subscribe(
             () => {
+              this.toastr.success('Has dejado de seguir a este usuario', 'Hecho');
+
               user.siguiendo = false; // Actualizar el estado de seguimiento
             },
             (error: any) => {
+              this.toastr.error(error, 'Error al dejar de seguir al usuario ${usuarioRecibeId}:');
+
               console.error(
                 `Error al dejar de seguir al usuario ${usuarioRecibeId}:`,
                 error
               );
             }
           );
-        }
-      } else { const verificationToken = localStorage.getItem('verificationToken');
-      if(verificationToken){
+      } else {
         // Si no lo sigue, seguirlo
         this.userService
           .seguir(usuarioRecibeId, usuarioEnviaId, verificationToken)
           .subscribe(
             () => {
+              this.toastr.success('Has empezado a seguir este usuario', 'Hecho');
+
               user.siguiendo = true; // Actualizar el estado de seguimiento
             },
             (error: any) => {
+              this.toastr.error(error, 'Error al seguir al usuario ${usuarioRecibeId}:');
+
               console.error(
                 `Error al seguir al usuario ${usuarioRecibeId}:`,
                 error
               );
             }
           );
-      }
       }
     }
   }

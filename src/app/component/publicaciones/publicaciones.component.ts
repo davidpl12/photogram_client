@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Publicacion } from 'src/app/models/Publicacion';
 import { PublicacionesService } from 'src/app/services/publicaciones.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-publicaciones',
@@ -13,10 +14,11 @@ export class PublicacionesComponent {
 
   usuarios: Publicacion[] = [];
 
-  constructor(private publicacionService: PublicacionesService, private router: Router) { }
+  constructor(private publicacionService: PublicacionesService, private router: Router, private toastr: ToastrService) { }
 
   ngOnInit() {
     this.cargarPublicaciones();
+
   }
 
   cargarPublicaciones() {
@@ -36,15 +38,18 @@ export class PublicacionesComponent {
 
     this.publicacionService.eliminarPublicacion(id,verificationToken).subscribe(
       () => {
-        console.log('Usuario eliminado correctamente');
+        this.toastr.success('Publicacion eliminada correctamente', 'Hecho');
+
+        console.log('publicacion eliminada correctamente');
         this.cargarPublicaciones();
       },
-      error => console.log(error)
+      error =>  this.toastr.error(error, 'Error')
+
     );
   }
 }
   editarPublicaciones(id: number) {
-    this.router.navigate(['/usuarios', id]);
+    this.router.navigate(['/publicaciones', id]);
 }
 
 }

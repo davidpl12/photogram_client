@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Observable, catchError, throwError } from 'rxjs';
+import { Observable, catchError, map, throwError } from 'rxjs';
 import { Publicacion } from '../models/Publicacion';
 import { Camara } from '../models/Camara';
 import { Album } from '../models/Album';
@@ -87,7 +87,7 @@ export class PublicacionesService {
         Authorization: `Bearer ${token}`,
       });
 
-      return this.http.put<Publicacion>(
+      return this.http.post<Publicacion>(
         `${this.apiUrl}/publicaciones/${id}`,
         publicacion,
         { headers }
@@ -112,6 +112,18 @@ export class PublicacionesService {
   } else {
     return throwError('Token de autenticación nulo');
   }
+  }
+
+  obtenerPublicacionesPorUsuario(idUsuario: number): Observable<any[]> {
+    const url = `${this.apiUrl}/publicaciones/usuario/${idUsuario}`;
+    return this.http.get<any[]>(url);
+  }
+
+  obtenerCamaraPorId(idCamara: number): Observable<any> {
+    const url = `${this.apiUrl}/camaras/${idCamara}`;
+    return this.http.get<any>(url).pipe(
+      map(response => response.modelo)
+    );
   }
 
   getNumSeguidores(idRecibe: number, token: string): Observable<any> {
@@ -215,6 +227,10 @@ export class PublicacionesService {
   }
 
 
+  getPublicacionesSeguidos(idUsuario: number): Observable<any> {
+    const url = `${this.apiUrl}/publicaciones/seguidores/${idUsuario}`;
+    return this.http.get(url);
+  }
 
   //CAMARAS
   getCamaras(token: string): Observable<Camara[]> {
