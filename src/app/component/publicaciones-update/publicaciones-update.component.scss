@@ -1,0 +1,48 @@
+.contenedor {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  width: calc(100vw - 220px);
+  margin: 0 auto;
+}
+h2{
+  text-align: center;
+  margin-top: 10px;
+}
+.formulario {
+  width: 400px;
+  padding: 20px;
+  background-color: #F4F9FF;
+  border-radius: 5px;
+
+  label {
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  input,
+  textarea,
+  select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+  }
+
+  button {
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  button[type="reset"] {
+    background-color: #ff5252;
+    margin-left: 10px;
+  }
+}
