@@ -131,6 +131,8 @@ body {
       height: $profile-image-size;
       border-radius: $profile-image-border-radius;
       margin-right: 10px;
+      object-fit: cover;
+        object-position: center;
     }
 
     .profile-options {

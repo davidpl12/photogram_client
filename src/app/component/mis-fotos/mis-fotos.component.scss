@@ -67,3 +67,25 @@ h3{
   object-fit: cover;
   object-position: center;
 }
+
+
+.photo-group {
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+  .photos {
+    width: 45%;
+    display: inline-flex;
+    margin: 2.5%;
+    &:empty {
+      display: none;
+    }
+    .photo-column, img {
+      width: 100%;
+    }
+    img {
+      aspect-ratio: 1/1;
+      height: 100%;
+    }
+  }
+}

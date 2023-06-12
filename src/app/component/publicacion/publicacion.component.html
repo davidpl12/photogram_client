@@ -1,53 +1,51 @@
 <h2>Nueva Publicación</h2>
 <div class="contenedor">
-  <div class="formulario" [formGroup]="myForm">
-    <form (ngSubmit)="crearPublicacion()" method="POST" enctype="multipart/form-data">
+  <div class="formulario" >
+    <form [formGroup]="publishForm" (ngSubmit)="crearPublicacion()" method="POST" enctype="multipart/form-data">
       <div>
         <label>Descripción:</label>
-        <textarea [(ngModel)]="descripcion" name="descripcion" required></textarea>
-        <div *ngIf="myForm.controls['descripcion'].invalid && (myForm.controls['descripcion'].dirty || myForm.controls['descripcion'].touched)" class="error-message">
-          Descripción es requerida.
+        <textarea formControlName="descripcion" id="descripcion" name="descripcion"></textarea>
+
+        <div *ngIf="publishForm.controls['descripcion'].invalid && (publishForm.controls['descripcion'].dirty || publishForm.controls['descripcion'].touched)" class="error-message">
+          <span *ngIf="publishForm.controls['descripcion'].hasError('required')">Descripción es un campo requerido</span>
         </div>
       </div>
       <div>
         <label>Lugar de realización:</label>
-        <input type="text" [(ngModel)]="lugarRealizacion" name="lugarRealizacion" required>
-        <div *ngIf="myForm.controls['lugarRealizacion'].invalid && (myForm.controls['lugarRealizacion'].dirty || myForm.controls['lugarRealizacion'].touched)" class="error-message">
+        <input type="text" formControlName="lugarRealizacion" name="lugarRealizacion" required>
+        <div *ngIf="publishForm.controls['lugarRealizacion'].invalid && (publishForm.controls['lugarRealizacion'].dirty || publishForm.controls['lugarRealizacion'].touched)" class="error-message">
           Lugar de realización es requerido.
         </div>
       </div>
       <div>
         <label>Licencia:</label>
-        <select [(ngModel)]="licencia" name="licencia" required>
+        <select formControlName="licencia" name="licencia" required>
           <option value="Creative Commons">Creative Commons</option>
           <option value="Public Domain">Public Domain</option>
         </select>
-        <div *ngIf="myForm.controls['licencia'].invalid && (myForm.controls['licencia'].dirty || myForm.controls['licencia'].touched)" class="error-message">
+        <div *ngIf="publishForm.controls['licencia'].invalid && (publishForm.controls['licencia'].dirty || publishForm.controls['licencia'].touched)" class="error-message">
           Licencia es requerida.
         </div>
       </div>
       <div>
         <label>Cámara:</label>
-        <select [(ngModel)]="camara" name="camara" required>
+        <select formControlName="camara" name="camara" required>
           <option *ngFor="let camarita of camaras" [value]="camarita.id">{{camarita.marca}} - {{camarita.modelo}}</option>
         </select>
-        <div *ngIf="myForm.controls['camara'].invalid && (myForm.controls['camara'].dirty || myForm.controls['camara'].touched)" class="error-message">
+        <div *ngIf="publishForm.controls['camara'].invalid && (publishForm.controls['camara'].dirty || publishForm.controls['camara'].touched)" class="error-message">
           Cámara es requerida.
         </div>
       </div>
       <div>
         <label>Imagen:</label>
-        <input type="file" (change)="onFileSelected($event)" name="imagen" required>
-        <div *ngIf="myForm.controls['imagen'].invalid && (myForm.controls['imagen'].dirty || myForm.controls['imagen'].touched)" class="error-message">
-          Imagen es requerida.
-        </div>
+        <input type="file" accept="image/*" (change)="onFileSelected($event)" name="imagen" required>
       </div>
       <div>
         <label>Álbum:</label>
-        <select [(ngModel)]="album" name="album" required>
+        <select formControlName="album" name="album" required>
           <option *ngFor="let albumes of albumes" [value]="albumes.id">{{albumes.nombre_album}}</option>
         </select>
-        <div *ngIf="myForm.controls['album'].invalid && (myForm.controls['album'].dirty || myForm.controls['album'].touched)" class="error-message">
+        <div *ngIf="publishForm.controls['album'].invalid && (publishForm.controls['album'].dirty || publishForm.controls['album'].touched)" class="error-message">
           Álbum es requerido.
         </div>
       </div>

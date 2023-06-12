@@ -74,7 +74,7 @@ export class PublicacionesUpdateComponent implements OnInit {
     // Construir el objeto FormData con los datos del formulario
     const formData = new FormData();
 
-      formData.append('autor', String(this.id));
+      formData.append('autor', String(this.autor));
 
     formData.append('descripcion', this.descripcion);
     formData.append('lugar_realizacion', this.lugarRealizacion);

@@ -16,19 +16,18 @@ import { Router } from '@angular/router';
   styleUrls: ['./publicacion.component.scss']
 })
 export class PublicacionComponent {
-  myForm: FormGroup;
+  publishForm: FormGroup;
   modalOpen: boolean = true;
   camaras: Camara[] = [];
   albumes: Album[] = [];
-
-  autor: string = '';
-  descripcion: string = '';
-  lugarRealizacion: string = '';
-  licencia: string = '';
-  camara: string = '';
+  autor: any = '';
+  // descripcion: any = '';
+  // lugarRealizacion: any = '';
+  // licencia: any = '';
+  // camara: any = '';
   imagen: File | null = null;
+  // album: any = '';
   numReacciones: number = 0;
-  album: string = '';
   mostrarMensaje: boolean = false;
 
   constructor(
@@ -38,12 +37,11 @@ export class PublicacionComponent {
     private toastr: ToastrService,
     private router: Router
   ) {
-    this.myForm = this.formBuilder.group({
+    this.publishForm = this.formBuilder.group({
       descripcion: ['', Validators.required],
       lugarRealizacion: ['', Validators.required],
       licencia: ['', Validators.required],
       camara: ['', Validators.required],
-      imagen: [''],
       album: ['', Validators.required],
     });
   }
@@ -51,33 +49,33 @@ export class PublicacionComponent {
   ngOnInit(): void {
     this.cargarCamaras();
     this.cargarAlbumes();
-    this.toastr.warning('La imagen debe ocupar menos de 3MB.', 'Atencion');
+    this.toastr.warning('La imagen debe ocupar menos de 3MB.', 'Atención');
 
   }
 
   crearPublicacion(): void {
     const verificationToken = localStorage.getItem('verificationToken');
     const autor_id = localStorage.getItem('id_user');
-    if (this.myForm.invalid) {
-      this.markFormGroupTouched(this.myForm);
+
+    if (this.publishForm.invalid) {
+      this.markFormGroupTouched(this.publishForm);
       this.toastr.error('Comprueba que tengas todos los campos rellenos', 'No se ha podido crear');
       return;
     }
     if (verificationToken !== null && autor_id) {
 
-
       const formData = new FormData();
       formData.append('autor', autor_id);
-      formData.append('descripcion', this.descripcion);
-      formData.append('lugar_realizacion', this.lugarRealizacion);
-      formData.append('licencia', this.licencia);
-      formData.append('camara', this.camara);
+      formData.append('descripcion', this.publishForm.value["descripcion"]);
+      formData.append('lugar_realizacion', this.publishForm.value["lugarRealizacion"]);
+      formData.append('licencia', this.publishForm.value["licencia"]);
+      formData.append('camara', this.publishForm.value["camara"]);
       if (this.imagen) {
         formData.append('imagen', this.imagen);
       }
-      formData.append('num_reacciones', String(this.numReacciones));
-      formData.append('album', this.album);
-      formData.append('fecha_public', new Date().toISOString());
+      formData.append('num_reacciones', '0');
+      formData.append('album', this.publishForm.value["album"]);
+      // formData.append('fecha_public', '');
 
       this.publicacionService
         .crearPublicacion(formData, verificationToken)
@@ -88,7 +86,7 @@ export class PublicacionComponent {
             this.toastr.success('La publicacion ha sido creada correctamente.', 'Correcto');
             this.router.navigate(['/inicio']);
 
-            // this.myForm.resetForm(); // Reiniciar el formulario
+            // this.publishForm.resetForm(); // Reiniciar el formulario
           },
           (error) => {
             this.toastr.error(error, 'Error');
@@ -100,13 +98,16 @@ export class PublicacionComponent {
       console.error('Token de verificación nulo');
     }
   }
+  descripcion(arg0: string, descripcion: any) {
+    throw new Error('Method not implemented.');
+  }
 
   onFileSelected(event: any) {
     this.imagen = event.target.files[0];
     console.log('event', event.target.files[0]);
     if (event.target.files[0].size > 3145728) {
-      this.imagen = null;
       this.toastr.error('La imagen ocupa más de 3MB.', 'Error');
+      this.imagen = null;
     }
   }
 

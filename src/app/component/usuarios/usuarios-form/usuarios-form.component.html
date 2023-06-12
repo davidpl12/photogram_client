@@ -36,7 +36,7 @@
     </div>
     <div>
       <label for="foto_perfil">Foto de Perfil</label>
-      <input type="file" id="foto_perfil" (change)="onFileSelected($event)">
+      <input type="file" accept="image/*" id="foto_perfil" (change)="onFileSelected($event)">
     </div>
     <div *ngIf="userRole == '1'">
       <label for="rol_id">Rol</label>

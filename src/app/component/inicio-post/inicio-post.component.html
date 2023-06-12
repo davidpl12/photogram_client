@@ -19,6 +19,10 @@
         <a href="/publicacion"><button>Añadir nuevo</button></a>
       </div>
 
+      <div class="no-post" *ngIf="publicaciones.length === 0">
+        <h3>No hay publicaciones para mostrar</h3>
+      </div>
+
       <div *ngFor="let publicacion of publicaciones" class="card">
         <div *ngFor="let usuarios of autor">
         <div *ngIf="publicacion.autor === usuarios.id" class="card-header">
@@ -53,6 +57,8 @@
 
         </div>
       </div>
+
+
         <div class="card-content">
           <a href="/publicacion/{{publicacion.id}}"><img [src]="url + publicacion.imagen" alt=""></a>
         </div>

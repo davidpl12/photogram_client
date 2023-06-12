@@ -24,9 +24,11 @@
     </div>
 
 
-    <p *ngIf="!publicaciones">No hay publicaciones aún</p>
 
     <div class="photos">
+      <div class="no-post" *ngIf="publicaciones.length === 0">
+        <h3>No hay publicaciones</h3>
+      </div>
       <div class="photo-column" *ngFor="let publicacion of publicaciones; let i = index;">
         <a href="/publicacion/{{publicacion.id}}">
           <img src="{{url}}{{publicacion.imagen}}" alt="Photo {{i + 1}}">

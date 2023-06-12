@@ -56,7 +56,6 @@ export class InicioPostComponent implements OnInit {
     }
     this.isLoading = false;
     this.toastr.info('Puedes reaccionar a la imagen pulsando en el corazón y así ayudar a los demas usuarios a saber tu opinion', 'Ayuda');
-
   }
 
   getPublicacionesSeguidos(idUsuario: number) {
